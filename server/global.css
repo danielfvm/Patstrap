@@ -1,0 +1,89 @@
+#background {
+    background: #24202f;
+}
+
+QLabel {
+    color: #ffffff;
+    font-weight: 300;
+    font-size: 25px;
+}
+
+QPushButton {
+    background: #109960;
+    border: none;
+    padding: 12px 15px;
+    text-decoration: none;
+    font-size: 20px;
+    margin: 0px 10px 0px 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    color: white;
+}
+
+QPushButton::hover {
+    background: #49d196;
+}
+
+QPushButton::disabled {
+    color: #c0c0c0;
+    background: #1c1927;
+}
+
+#connected {
+    color: #29b980;
+    font-size: 30px;
+}
+
+#disconnected {
+    color: #b94029;
+    font-size: 30px;
+}
+
+#section0 {
+    background: rgba(44, 40, 54, 1);
+    border-radius: 10px;
+    margin-bottom: 5px;
+    border-image: url(background0.png)
+}
+
+#section1 {
+    background: rgba(44, 40, 54, 1);
+    border-radius: 10px;
+    margin-bottom: 5px;
+    border-image: url(background1.png)
+}
+
+#section2 {
+    background: rgba(44, 40, 54, 1);
+    border-radius: 10px;
+    margin-bottom: 5px;
+    border-image: url(background2.png)
+}
+
+#section3 {
+    background: rgba(44, 40, 54, 1);
+    border-radius: 10px;
+    margin-bottom: 5px;
+    border-image: url(background3.png)
+}
+
+QSlider {
+    height: 15px;
+}
+
+QSlider::add-page:horizontal {
+    background: white;
+}
+
+QSlider::sub-page:horizontal {
+    background: #29b980;
+}
+
+QSlider::handle:horizontal {
+    height: 10px;
+    width: 10px;
+    background: #109960;
+}
+QSlider::handle:horizontal:hover {
+    background: #29b980;
+}
