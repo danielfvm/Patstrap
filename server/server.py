@@ -10,8 +10,14 @@ import time
 class Server():
     def __init__(self, window) -> None:
         self.window = window
-        self.socket = None
         self.running = True
+        self.reset()
+        threading.Thread(target=self._connect_socket, args=()).start()
+        threading.Thread(target=self._connect_osc, args=()).start()
+        threading.Thread(target=self._update_loop, args=()).start()
+
+    def reset(self):
+        self.socket = None
         self.strength_right = 0
         self.strength_left = 0
         self.prev_right_value = 0
@@ -20,9 +26,7 @@ class Server():
         self.prev_left = 0
         self.last_time_right = time.time()
         self.last_time_left = time.time()
-        threading.Thread(target=self._connect_socket, args=()).start()
-        threading.Thread(target=self._connect_osc, args=()).start()
-        threading.Thread(target=self._update_loop, args=()).start()
+        self.keepAliveTimeout = time.time()
 
     def set_pat(self, left: float, right: float):
         if self.socket is None:
@@ -78,8 +82,8 @@ class Server():
             except:
                 pass
 
-            self.socket = None
             self.window.set_patstrap_status(False)
+            self.reset()
             print("Connection failed")
 
     def _update_loop(self):
@@ -87,34 +91,42 @@ class Server():
             intensity = self.window.get_intensity()
             self.strength_right = max(0, min(1, self.strength_right-0.1))
             self.strength_left = max(0, min(1, self.strength_left-0.1))
+
             self.set_pat(self.strength_left * intensity, self.strength_right * intensity)
             time.sleep(0.03)
 
-    def _connect_osc(self):
-        def _hit_collider_right(addr, value):
-            currentTime = time.time()
-            self.strength_right = abs(self.prev_right_value-value)/(currentTime-self.last_time_right)
-            self.prev_right_value = value
-            self.last_time_right = currentTime
+            self.window.set_vrchat_status(time.time() < self.keepAliveTimeout)
 
-        def _hit_collider_left(addr, value):
+    def _connect_osc(self):
+        def _hit_collider_right(_, value):
             currentTime = time.time()
-            self.strength_left = abs(self.prev_left_value-value)/(currentTime-self.last_time_left)
-            self.prev_left_value = value
-            self.last_time_left = currentTime
+            if currentTime > self.last_time_right:
+                self.strength_right = abs(self.prev_right_value-value)/(currentTime-self.last_time_right)
+                self.prev_right_value = value
+                self.last_time_right = currentTime
+
+        def _hit_collider_left(_, value):
+            currentTime = time.time()
+            if currentTime > self.last_time_left:
+                self.strength_left = abs(self.prev_left_value-value)/(currentTime-self.last_time_left)
+                self.prev_left_value = value
+                self.last_time_left = currentTime
+
+        def _recv_packet(_, value):
+            self.keepAliveTimeout = time.time() + 2
 
         dispatcher = Dispatcher()
         dispatcher.map("/avatar/parameters/pat_right", _hit_collider_right)
         dispatcher.map("/avatar/parameters/pat_left", _hit_collider_left)
-        #dispatcher.map("/avatar/parameters/pat_middle", _hit_collider_middle)
+        dispatcher.map("/avatar/parameters/*", _recv_packet)
 
         self.osc = BlockingOSCUDPServer(("127.0.0.1", 9001), dispatcher)
         print("OSC serving on {}".format(self.osc.server_address)) # While server is active, receive messages
         self.osc.serve_forever()
 
     def shutdown(self):
+        self.running = False
         self.osc.shutdown()
         if self.socket is not None:
             self.socket.shutdown(2)
             self.socket.close()
-        self.running = False

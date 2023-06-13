@@ -1,7 +1,3 @@
-#background {
-    background: #24202f;
-}
-
 QLabel {
     color: #ffffff;
     font-weight: 300;
@@ -29,42 +25,14 @@ QPushButton::disabled {
     background: #1c1927;
 }
 
-#connected {
-    color: #29b980;
-    font-size: 30px;
+#mainbackground {
+    background: #24202f;
 }
 
-#disconnected {
-    color: #b94029;
-    font-size: 30px;
-}
-
-#section0 {
+#section {
     background: rgba(44, 40, 54, 1);
     border-radius: 10px;
     margin-bottom: 5px;
-    border-image: url(background0.png)
-}
-
-#section1 {
-    background: rgba(44, 40, 54, 1);
-    border-radius: 10px;
-    margin-bottom: 5px;
-    border-image: url(background1.png)
-}
-
-#section2 {
-    background: rgba(44, 40, 54, 1);
-    border-radius: 10px;
-    margin-bottom: 5px;
-    border-image: url(background2.png)
-}
-
-#section3 {
-    background: rgba(44, 40, 54, 1);
-    border-radius: 10px;
-    margin-bottom: 5px;
-    border-image: url(background3.png)
 }
 
 QSlider {

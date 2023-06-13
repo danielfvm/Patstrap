@@ -11,18 +11,18 @@ class MainWindow(QWidget):
 
         self.slider_strength = None
 
-        self.server = Server(self)
         self.prev_patstrap_status = False
         self.prev_vrchat_status = False
 
-        self.setWindowTitle("Patstrap Server")
-        self.loadStylesheet()
+        self.setWindowTitle("Patstrap Server 0.2")
+        with open("global.css","r") as file:
+            self.setStyleSheet(file.read())
 
         layoutMain = QVBoxLayout()
         layoutMain.setContentsMargins(0, 0, 0, 0)
 
         box = QWidget()
-        box.setObjectName("background")
+        box.setObjectName("mainbackground")
 
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -30,19 +30,17 @@ class MainWindow(QWidget):
         layout.addWidget(self.create_vrchat_status())
         layout.addWidget(self.create_settings())
         layout.addWidget(self.create_test())
+        
+        self.server = Server(self)
 
         box.setLayout(layout)
         layoutMain.addWidget(box)
 
         self.setLayout(layoutMain)
 
-    def loadStylesheet(self):
-        with open("global.css","r") as file:
-            self.setStyleSheet(file.read())
-
     def create_patstrap_status(self):
         box = QWidget()
-        box.setObjectName("section0")
+        box.setObjectName("section")
         box.setFixedHeight(85)
 
         layout = QHBoxLayout()
@@ -55,7 +53,7 @@ class MainWindow(QWidget):
 
         self.status_hardware_connection = QLabel(" ⬤")
         self.status_hardware_connection.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.status_hardware_connection.setObjectName("disconnected")
+        self.status_hardware_connection.setStyleSheet("color: #b94029; font-size: 30px;")
         layout.addWidget(self.status_hardware_connection)
 
         box.setLayout(layout)
@@ -63,7 +61,7 @@ class MainWindow(QWidget):
 
     def create_vrchat_status(self):
         box = QWidget()
-        box.setObjectName("section1")
+        box.setObjectName("section")
         box.setFixedHeight(85)
 
         layout = QHBoxLayout()
@@ -76,7 +74,7 @@ class MainWindow(QWidget):
 
         self.status_vrchat_connection = QLabel("  ⬤")
         self.status_vrchat_connection.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.status_vrchat_connection.setObjectName("disconnected")
+        self.status_vrchat_connection.setStyleSheet("color: #b94029; font-size: 30px;")
         layout.addWidget(self.status_vrchat_connection)
 
         box.setLayout(layout)
@@ -84,7 +82,7 @@ class MainWindow(QWidget):
 
     def create_settings(self):
         box = QWidget()
-        box.setObjectName("section2")
+        box.setObjectName("section")
         box.setFixedHeight(85)
 
         layout = QHBoxLayout()
@@ -112,7 +110,7 @@ class MainWindow(QWidget):
 
     def create_test(self):
         box = QWidget()
-        box.setObjectName("section3")
+        box.setObjectName("section")
         box.setFixedHeight(140)
 
         layoutH = QHBoxLayout()
@@ -139,22 +137,17 @@ class MainWindow(QWidget):
         return box
 
     def pat_left(self):
-        print("Patting left")
-        self.server.set_pat(self.get_intensity(), 0)
-        time.sleep(1)
-        self.server.set_pat(0, 0)
+        print("Pat left")
+        self.server.strength_left = 2
 
     def pat_right(self):
-        print("Patting right")
-        self.server.set_pat(0, self.get_intensity())
-        time.sleep(1)
-        self.server.set_pat(0, 0)
+        print("Patt right")
+        self.server.strength_right = 2
 
     def set_patstrap_status(self, status: bool):
         if self.prev_patstrap_status != status:
             self.prev_patstrap_status = status
-            self.status_hardware_connection.setObjectName("connected" if status else "disconnected")
-            self.loadStylesheet()
+            self.status_hardware_connection.setStyleSheet("color: #29b980; font-size: 30px;" if status else "color: #b94029; font-size: 30px;")
 
             self.test_right_button.setDisabled(not status)
             self.test_left_button.setDisabled(not status)
@@ -162,8 +155,7 @@ class MainWindow(QWidget):
     def set_vrchat_status(self, status: bool):
         if self.prev_vrchat_status != status:
             self.prev_vrchat_status = status
-            self.status_vrchat_connection.setObjectName("connected" if status else "disconnected")
-            self.loadStylesheet()
+            self.status_vrchat_connection.setStyleSheet("color: #29b980; font-size: 30px;" if status else "color: #b94029; font-size: 30px;")
 
     def closeEvent(self, _):
         self.server.shutdown()
