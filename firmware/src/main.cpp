@@ -20,8 +20,8 @@ void setup() {
   pinMode(HAPTIC_LEFT, OUTPUT);
   pinMode(HAPTIC_RIGHT, OUTPUT);
 
-  digitalWrite(HAPTIC_LEFT, HIGH);
-  digitalWrite(HAPTIC_RIGHT, HIGH);
+  digitalWrite(HAPTIC_LEFT, LOW);
+  digitalWrite(HAPTIC_RIGHT, LOW);
 
   Serial.begin(9600);
 
@@ -37,10 +37,10 @@ void setup() {
   Serial.println("Connecting to Wifi");
   while (WiFi.status() != WL_CONNECTED) {   
     delay(100);
-    digitalWrite(INTERNAL_LED, LOW);
+    digitalWrite(INTERNAL_LED, HIGH);
     Serial.print(".");
     delay(100);
-    digitalWrite(INTERNAL_LED, HIGH);
+    digitalWrite(INTERNAL_LED, LOW);
   }
 
   Serial.print("IP address: ");
@@ -55,20 +55,20 @@ void setup() {
   Serial.println("mDNS responder started");
 
 
-  digitalWrite(HAPTIC_LEFT, LOW);
-  digitalWrite(HAPTIC_RIGHT, LOW);
-  delay(500);
   digitalWrite(HAPTIC_LEFT, HIGH);
   digitalWrite(HAPTIC_RIGHT, HIGH);
+  delay(500);
+  digitalWrite(HAPTIC_LEFT, LOW);
+  digitalWrite(HAPTIC_RIGHT, LOW);
 }
 
 void loop() {
   MDNS.update();
 
   delay(500);
-  digitalWrite(INTERNAL_LED, HIGH);
-  delay(500);
   digitalWrite(INTERNAL_LED, LOW);
+  delay(500);
+  digitalWrite(INTERNAL_LED, HIGH);
 
   WiFiClient client = server.available();
   
@@ -85,8 +85,8 @@ void loop() {
       }
 
       // create PWM signal for both haptic sensors 
-      digitalWrite(HAPTIC_LEFT, haptic_left_level > pwm_number);
-      digitalWrite(HAPTIC_RIGHT, haptic_right_level > pwm_number);
+      digitalWrite(HAPTIC_LEFT, haptic_left_level <= pwm_number);
+      digitalWrite(HAPTIC_RIGHT, haptic_right_level <= pwm_number);
       delayMicroseconds(1);
 
       if (++pwm_number >= 0xF) {
