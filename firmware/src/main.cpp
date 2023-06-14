@@ -37,10 +37,10 @@ void setup() {
   Serial.println("Connecting to Wifi");
   while (WiFi.status() != WL_CONNECTED) {   
     delay(100);
-    digitalWrite(INTERNAL_LED, HIGH);
+    digitalWrite(INTERNAL_LED, LOW);
     Serial.print(".");
     delay(100);
-    digitalWrite(INTERNAL_LED, LOW);
+    digitalWrite(INTERNAL_LED, HIGH);
   }
 
   Serial.print("IP address: ");
@@ -66,9 +66,9 @@ void loop() {
   MDNS.update();
 
   delay(500);
-  digitalWrite(INTERNAL_LED, LOW);
-  delay(500);
   digitalWrite(INTERNAL_LED, HIGH);
+  delay(500);
+  digitalWrite(INTERNAL_LED, LOW);
 
   WiFiClient client = server.available();
   
