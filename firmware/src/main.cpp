@@ -62,6 +62,8 @@ void setup() {
   digitalWrite(HAPTIC_RIGHT, LOW);
 }
 
+int lp, rp;
+
 void loop() {
   MDNS.update();
 
@@ -85,14 +87,18 @@ void loop() {
       }
 
       // create PWM signal for both haptic sensors 
-      digitalWrite(HAPTIC_LEFT, haptic_left_level <= pwm_number);
-      digitalWrite(HAPTIC_RIGHT, haptic_right_level <= pwm_number);
+      digitalWrite(HAPTIC_LEFT, haptic_left_level);
+      digitalWrite(HAPTIC_RIGHT, haptic_right_level);
       delayMicroseconds(1);
 
-      Serial.print("MOTOR: ");
-      Serial.print(haptic_left_level <= pwm_number);
-      Serial.print(" : ");
-      Serial.println(haptic_right_level <= pwm_number);
+      if (lp != haptic_left_level || rp != haptic_left_level) {
+        Serial.print("MOTOR: ");
+        Serial.print(haptic_left_level <= pwm_number);
+        Serial.print(" : ");
+        Serial.println(haptic_right_level <= pwm_number);
+        lp = haptic_left_level;
+        rp = haptic_right_level;
+      }
 
       if (++pwm_number >= 0xF) {
         pwm_number = 0;
