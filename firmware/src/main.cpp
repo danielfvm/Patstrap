@@ -89,6 +89,11 @@ void loop() {
       digitalWrite(HAPTIC_RIGHT, haptic_right_level <= pwm_number);
       delayMicroseconds(1);
 
+      Serial.print("MOTOR: ");
+      Serial.print(haptic_left_level <= pwm_number);
+      Serial.print(" : ");
+      Serial.println(haptic_right_level <= pwm_number);
+
       if (++pwm_number >= 0xF) {
         pwm_number = 0;
       }
