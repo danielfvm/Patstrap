@@ -5,6 +5,10 @@
 #define HAPTIC_LEFT 5  // D1
 #define HAPTIC_RIGHT 4 // D2
 
+// When after connection (LED is not blinking anymore) it starts vibrating
+// and turns of when you do the pat you need to uncomment/comment this line.
+#define INVERT_SIGNAL
+
 #define SERVER_PORT 8888
 
 static WiFiServer server(SERVER_PORT);
@@ -82,8 +86,13 @@ void loop() {
       // Process recv byte
       while (client.available() > 0) {
         char data = client.read();
+        #ifdef INVERT_SIGNAL
+        haptic_right_level = 0x0F - (data & 0x0F);
+        haptic_left_level = 0x0F - (data >> 4);
+        #else
         haptic_right_level = data & 0x0F;
         haptic_left_level = data >> 4;
+        #endif
       }
 
       // create PWM signal for both haptic sensors 
