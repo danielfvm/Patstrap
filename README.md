@@ -1,7 +1,7 @@
 # Patstrap (work in progress)
 ![Repository size](https://img.shields.io/github/repo-size/danielfvm/Patstrap?color=39d45f) 
 [![GitHub last commit](https://img.shields.io/github/last-commit/danielfvm/Patstrap?color=39d45f)](https://github.com/danielfvm/Patstrap/commits/master) 
-![License](https://img.shields.io/badge/license-MIT-39d45f) 
+![License](https://img.shields.io/badge/license-GPL-39d45f) 
 [![Stargazers](https://img.shields.io/github/stars/danielfvm/Patstrap?color=39d45f&logo=github)](https://github.com/danielfvm/Patstrap/stargazers)
 
 An open hardware and software project which tries to implement haptic head pat feedback to the player in VR. This project focuses mainly on VRChat's OSC support but might in the future also support other games. The project consists of a hardware part the "Headpat-Strap" or just "Patstrap", a Server running on the PC and the required edits on a VRChat-Avatar to support the communication over OSC. Keep in mind that this is only a hobby project, but feel free to experiment, edit the code or tweak the hardware to your liking.
