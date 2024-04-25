@@ -31,7 +31,7 @@ class Server():
     def set_pat(self, left: float, right: float):
         if self.socket is None:
             return
-        
+
         left = int((1-left) * 15)
         right = int((1-right) * 15)
         data = (left << 4) | right
