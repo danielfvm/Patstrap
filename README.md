@@ -90,11 +90,11 @@ For the Patstrap to work you will need to [enable OSC Support in VRChat](https:/
     Now you should be ready to test and upload your avatar.
 
 ### Testing & Debugging
-After you uploaded your avatar and enabled osc support, the `VRChat connection` indicator should turn green as soon as you (or someone else) touches your head. If this is not the case there a following steps you can do to find the origin of the issue.
-1. Check if the just added parameters were added to your uploaded avatar. You can find the json file at `~\AppData\LocalLow\VRChat\VRChat\OSC\{userId}\Avatars\{avatarId}.json`. For more information see [VRChat's docs](https://docs.vrchat.com/docs/osc-avatar-parameters). 
-2. Use [Protokol](https://hexler.net/protokol) for debugging and check if `pat_left`, `pat_right` or `pat_middle` appears in the log. Make sure you set the port to the port used by [VRChat (default 9001)](https://docs.vrchat.com/docs/osc-overview).
+After you uploaded your avatar and enabled osc support, the `VRChat connection` indicator should turn green as soon as the server software receives any avatar parameter including the head pat parameter. If this is not the case the following steps should help you finding the issue.
+1. Check if the parameters `pat_right` and `pat_left` were added to your uploaded avatar. You can find the json file at `~\AppData\LocalLow\VRChat\VRChat\OSC\{userId}\Avatars\{avatarId}.json`. For more information see [VRChat's docs](https://docs.vrchat.com/docs/osc-avatar-parameters). If that is not the case, make sure the Avatar setup step was done correctly.
+2. Use [Protokol](https://hexler.net/protokol) for debugging and check if `pat_left` or `pat_right` appear in the log. Make sure you set the port to the port used by [VRChat (default 9001)](https://docs.vrchat.com/docs/osc-overview).
 3. Start Patstrap Server in the CMD and look for error messages.
-4. If nothing worked feel free to ask me for help on Discord: DeanCode#3641
+4. If nothing worked feel free to file an [issue](https://github.com/danielfvm/Patstrap/issues) or ask me on the [Discord Server](https://discord.gg/QsuHQXECw2) or write me directly at `DeanCode#3641`.
 
 ## Changelog v0.2
 * Simplified background in server application
@@ -103,4 +103,4 @@ After you uploaded your avatar and enabled osc support, the `VRChat connection` 
 * Fixed VRChat status indicator not working
 
 ## Credits
-This project uses and refers to many parts from the [SlimeVR](https://www.crowdsupply.com/slimevr/slimevr-full-body-tracker) Project which is an open hardware, full body tracking solution and a great project to checkout.
+This project uses and refers to many parts from the [SlimeVR](https://www.crowdsupply.com/slimevr/slimevr-full-body-tracker) project which is an open hardware, full body tracking solution and a great project that you definitely should checkout.
