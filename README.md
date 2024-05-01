@@ -91,7 +91,7 @@ For the Patstrap to work you will need to [enable OSC Support in VRChat](https:/
 
 ### Testing & Debugging
 After you uploaded your avatar and enabled osc support, the `VRChat connection` indicator should turn green as soon as the server software receives any avatar parameter including the head pat parameter. If this is not the case the following steps should help you finding the issue.
-1. Check if the parameters `pat_right` and `pat_left` were added to your uploaded avatar. You can find the json file at `~\AppData\LocalLow\VRChat\VRChat\OSC\{userId}\Avatars\{avatarId}.json`. For more information see [VRChat's docs](https://docs.vrchat.com/docs/osc-avatar-parameters). If that is not the case, make sure the Avatar setup step was done correctly.
+1. Check if the parameters `pat_right` and `pat_left` were added to your uploaded avatar. You can find the json file at `~\AppData\LocalLow\VRChat\VRChat\OSC\{userId}\Avatars\{avatarId}.json`. If that is not the case, make sure the Avatar setup step was done correctly. For more information you can also check [VRChat's docs](https://docs.vrchat.com/docs/osc-avatar-parameters).
 2. Use [Protokol](https://hexler.net/protokol) for debugging and check if `pat_left` or `pat_right` appear in the log. Make sure you set the port to the port used by [VRChat (default 9001)](https://docs.vrchat.com/docs/osc-overview).
 3. Start Patstrap Server in the CMD and look for error messages.
 4. If nothing worked feel free to file an [issue](https://github.com/danielfvm/Patstrap/issues) or ask me on the [Discord Server](https://discord.gg/QsuHQXECw2) or write me directly at `DeanCode#3641`.
