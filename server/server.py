@@ -18,6 +18,7 @@ class Server():
 
     def reset(self):
         self.socket = None
+        self.connected = False
         self.strength_right = 0
         self.strength_left = 0
         self.prev_right_value = 0
@@ -65,12 +66,11 @@ class Server():
         print("Patstrap address found: " + ip_address)
 
         while self.running:
-            time.sleep(1)
-
             try:
                 self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.socket.settimeout(2)
                 self.socket.connect((ip_address, 8888))
+                self.connected = True
                 self.set_pat(0, 0)
 
                 # Set connection status to green
@@ -78,24 +78,40 @@ class Server():
 
                 # Wait until connection is closed
                 while True:
-                    result = self.socket.recv(1)
+                    battery = int.from_bytes(self.socket.recv(1), "big")
+                    print("battery: " + str(battery))
+                    if battery != 255: # 255 = no battery
+                        self.window.set_battery(battery)
             except:
                 pass
 
+            self.connected = False
             self.window.set_patstrap_status(False)
             self.reset()
-            print("Connection failed")
+
+            if self.running:
+                print(f"Try reconnecting to patstrap at {ip_address}")
+                time.sleep(3)
+
+        print("Disconnected")
 
     def _update_loop(self):
         while self.running:
-            intensity = self.window.get_intensity()
-            self.strength_right = max(0, min(1, self.strength_right-0.1))
-            self.strength_left = max(0, min(1, self.strength_left-0.1))
+            if self.connected == False:
+                time.sleep(1)
+                continue
 
-            self.set_pat(self.strength_left * intensity, self.strength_right * intensity)
-            time.sleep(0.03)
+            try:
+                intensity = self.window.get_intensity()
+                self.strength_right = max(0, min(1, self.strength_right-0.1))
+                self.strength_left = max(0, min(1, self.strength_left-0.1))
 
-            self.window.set_vrchat_status(time.time() < self.keepAliveTimeout)
+                self.set_pat(self.strength_left * intensity, self.strength_right * intensity)
+                time.sleep(0.03)
+
+                self.window.set_vrchat_status(time.time() < self.keepAliveTimeout)
+            except TimeoutError as e:
+                print(e)
 
     def _connect_osc(self):
         def _hit_collider_right(_, value):

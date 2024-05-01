@@ -62,6 +62,7 @@ void setup() {
   pinMode(PIN_INTERNAL_LED, OUTPUT);
   pinMode(PIN_HAPTIC_LEFT, OUTPUT);
   pinMode(PIN_HAPTIC_RIGHT, OUTPUT);
+  pinMode(PIN_BATTERY_LEVEL, INPUT);
 
   digitalWrite(PIN_HAPTIC_LEFT, HAPTIC_OFF);
   digitalWrite(PIN_HAPTIC_RIGHT, HAPTIC_OFF);
@@ -139,8 +140,11 @@ void loop() {
       // send keep_alive package every second
       if (++keep_alive >= 100000) {
         keep_alive = 0;
-        client.print('k'); // k for keep_alive
-        client.print(getBatteryLevel());
+        #if defined(USE_BATTERY)
+        client.print((char)getBatteryLevel());
+        #else
+        client.print((char)255);
+        #endif
         client.flush();
       }
     }

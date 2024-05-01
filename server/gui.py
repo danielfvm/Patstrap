@@ -26,7 +26,7 @@ class MainWindow(QWidget):
         self.prev_patstrap_status = False
         self.prev_vrchat_status = False
 
-        self.setWindowTitle("Patstrap Server 0.2")
+        self.setWindowTitle("Patstrap Server 0.3")
         with open(resource_path("global.css"), "r") as file:
             self.setStyleSheet(file.read())
 
@@ -41,6 +41,7 @@ class MainWindow(QWidget):
         layout.addWidget(self.create_patstrap_status())
         layout.addWidget(self.create_vrchat_status())
         layout.addWidget(self.create_settings())
+        layout.addWidget(self.create_patstrap_battery_status())
         layout.addWidget(self.create_test())
 
         self.server = Server(self)
@@ -53,7 +54,6 @@ class MainWindow(QWidget):
     def create_patstrap_status(self):
         box = QWidget()
         box.setObjectName("section")
-        box.setFixedHeight(85)
 
         layout = QHBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -65,16 +65,49 @@ class MainWindow(QWidget):
 
         self.status_hardware_connection = QLabel(" ⬤")
         self.status_hardware_connection.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.status_hardware_connection.setStyleSheet("color: #b94029; font-size: 30px;")
+        self.status_hardware_connection.setStyleSheet("color: #ba3f41;")
         layout.addWidget(self.status_hardware_connection)
 
         box.setLayout(layout)
         return box
 
+    def create_patstrap_battery_status(self):
+        box = QWidget()
+        box.setObjectName("section")
+
+        layout = QHBoxLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        layout.setContentsMargins(20, 20, 20, 20)
+
+        title_label = QLabel("Battery")
+        title_label.setAlignment(Qt.AlignmentFlag.AlignVCenter)
+        layout.addWidget(title_label)
+
+
+        self.status_hardware_battery = QLabel("unknown")
+        self.status_hardware_battery.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.status_hardware_battery.setStyleSheet("color: #999999;")
+        layout.addWidget(self.status_hardware_battery)
+
+        box.setLayout(layout)
+        return box
+
+    def set_battery(self, percent):
+        color = "#ffffff"
+
+        if percent < 20:
+            color = "#ba3f41"
+        elif percent < 60:
+            color = "#fcba03"
+        elif percent <= 100:
+            color = "#76abae"
+
+        self.status_hardware_battery.setText(f"{percent}%")
+        self.status_hardware_battery.setStyleSheet(f"color: {color};")
+
     def create_vrchat_status(self):
         box = QWidget()
         box.setObjectName("section")
-        box.setFixedHeight(85)
 
         layout = QHBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -86,7 +119,7 @@ class MainWindow(QWidget):
 
         self.status_vrchat_connection = QLabel("  ⬤")
         self.status_vrchat_connection.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.status_vrchat_connection.setStyleSheet("color: #b94029; font-size: 30px;")
+        self.status_vrchat_connection.setStyleSheet("color: #ba3f41;")
         layout.addWidget(self.status_vrchat_connection)
 
         box.setLayout(layout)
@@ -95,7 +128,6 @@ class MainWindow(QWidget):
     def create_settings(self):
         box = QWidget()
         box.setObjectName("section")
-        box.setFixedHeight(85)
 
         layout = QHBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -159,7 +191,7 @@ class MainWindow(QWidget):
     def set_patstrap_status(self, status: bool):
         if self.prev_patstrap_status != status:
             self.prev_patstrap_status = status
-            self.status_hardware_connection.setStyleSheet("color: #29b980; font-size: 30px;" if status else "color: #b94029; font-size: 30px;")
+            self.status_hardware_connection.setStyleSheet("color: #76abae;" if status else "color: #ba3f41;")
 
             self.test_right_button.setDisabled(not status)
             self.test_left_button.setDisabled(not status)
@@ -167,15 +199,16 @@ class MainWindow(QWidget):
     def set_vrchat_status(self, status: bool):
         if self.prev_vrchat_status != status:
             self.prev_vrchat_status = status
-            self.status_vrchat_connection.setStyleSheet("color: #29b980; font-size: 30px;" if status else "color: #b94029; font-size: 30px;")
+            self.status_vrchat_connection.setStyleSheet("color: #76abae;" if status else "color: #ba3f41;")
 
     def closeEvent(self, _):
+        print("Exiting server...")
         self.server.shutdown()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     window = MainWindow()
-    window.setFixedSize(400, 425)
+    window.setFixedSize(400, 485)
     window.show()
     sys.exit(app.exec())
