@@ -77,8 +77,8 @@ class Server():
                 self.window.set_patstrap_status(True)
 
                 # Wait until connection is closed
-                while self.socket.recv(1) == b'k':
-                    pass
+                while True:
+                    result = self.socket.recv(1)
             except:
                 pass
 
