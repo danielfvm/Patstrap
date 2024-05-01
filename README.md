@@ -1,4 +1,9 @@
-# Patstrap (work in progress, not everything uploaded yet!)
+# Patstrap (work in progress)
+![Repository size](https://img.shields.io/github/repo-size/danielfvm/Patstrap?color=39d45f) 
+[![GitHub last commit](https://img.shields.io/github/last-commit/danielfvm/Patstrap?color=39d45f)](https://github.com/danielfvm/Patstrap/commits/master) 
+![License](https://img.shields.io/badge/license-GPL-39d45f) 
+[![Stargazers](https://img.shields.io/github/stars/danielfvm/Patstrap?color=39d45f&logo=github)](https://github.com/danielfvm/Patstrap/stargazers)
+
 An open hardware and software project which tries to implement haptic head pat feedback to the player in VR. This project focuses mainly on VRChat's OSC support but might in the future also support other games. The project consists of a hardware part the "Headpat-Strap" or just "Patstrap", a Server running on the PC and the required edits on a VRChat-Avatar to support the communication over OSC. Keep in mind that this is only a hobby project, but feel free to experiment, edit the code or tweak the hardware to your liking.
 
 ### Goals
@@ -54,9 +59,9 @@ For the Patstrap to work you will need to [enable OSC Support in VRChat](https:/
 
 1. Create Empties
 
-    First open up your Avatar in Unity, go to `armature -> Hips -> Spine -> Chest -> Neck -> Head` and add three `Empty` objects as child of Head. It should look like the following image. Optionally you can rename them for better organization.
-    
-    ![image](https://github.com/danielfvm/Patstrap/assets/23420640/652bdb71-cdbb-4769-95d3-e1a5941a1d93)
+    First open up your Avatar in Unity, go to `armature -> Hips -> Spine -> Chest -> Neck -> Head` and add two `Empty` objects as a child of the head. It should look like the following image. Optionally you can rename them for better organization.
+   
+    ![image](https://github.com/danielfvm/Patstrap/assets/23420640/520a7821-0146-4770-a49b-028987a2f8cc)
 
 2. Add Contact Receivers 
 
@@ -66,22 +71,21 @@ For the Patstrap to work you will need to [enable OSC Support in VRChat](https:/
 
 3. Positioning 
 
-    Now move the contact receivers to your left, middle and right of your avatar's head. Change the size and form if required. The position and size should resemble the following.
+    Now move the contact receivers to your left and right of your avatar's head. Change the size and form if required. The position and size should resemble the following.
     
-    ![image](https://github.com/danielfvm/Patstrap/assets/23420640/4b7490e0-8d6c-4b90-a3d9-0aab9d54384a)
+    ![image](https://github.com/danielfvm/Patstrap/assets/23420640/46c971fd-c8a5-476f-8a55-a8563d6591f7)
 
-3. Configure Contact Receivers
+4. Configure Contact Receivers
 
     Under the section `Collision Tags` click on `Add` and select `Hand` and repeat this step for `Finger`. In the section `Receiver` change `Receiver Type` to `Proximity` and the `Parameter` to one of the following fitting names.
     * `pat_right` for the collider placed on the right side
     * `pat_left` for the collider placed on the left side
-    * `pat_middle` for the collider placed in between the two
 
     The end result should look similar to the following image. Repeat this step for the other two contact receivers.
     
     ![image](https://github.com/danielfvm/Patstrap/assets/23420640/7b309612-dcd8-4122-aa49-7cbfa56223e9)
-
-4. Upload
+   
+5. Upload
 
     Now you should be ready to test and upload your avatar.
 
@@ -91,6 +95,12 @@ After you uploaded your avatar and enabled osc support, the `VRChat connection` 
 2. Use [Protokol](https://hexler.net/protokol) for debugging and check if `pat_left`, `pat_right` or `pat_middle` appears in the log. Make sure you set the port to the port used by [VRChat (default 9001)](https://docs.vrchat.com/docs/osc-overview).
 3. Start Patstrap Server in the CMD and look for error messages.
 4. If nothing worked feel free to ask me for help on Discord: DeanCode#3641
+
+## Changelog v0.2
+* Simplified background in server application
+* Fixed test buttons
+* Potentially fixed a div by zero crash
+* Fixed VRChat status indicator not working
 
 ## Credits
 This project uses and refers to many parts from the [SlimeVR](https://www.crowdsupply.com/slimevr/slimevr-full-body-tracker) Project which is an open hardware, full body tracking solution and a great project to checkout.

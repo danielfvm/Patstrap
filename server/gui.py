@@ -4,6 +4,18 @@ from server import Server
 
 import time
 import sys
+import os
+
+# Taken from https://stackoverflow.com/questions/7674790/bundling-data-files-with-pyinstaller-onefile
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -15,7 +27,7 @@ class MainWindow(QWidget):
         self.prev_vrchat_status = False
 
         self.setWindowTitle("Patstrap Server 0.2")
-        with open("global.css","r") as file:
+        with open(resource_path("global.css"), "r") as file:
             self.setStyleSheet(file.read())
 
         layoutMain = QVBoxLayout()
@@ -30,7 +42,7 @@ class MainWindow(QWidget):
         layout.addWidget(self.create_vrchat_status())
         layout.addWidget(self.create_settings())
         layout.addWidget(self.create_test())
-        
+
         self.server = Server(self)
 
         box.setLayout(layout)
