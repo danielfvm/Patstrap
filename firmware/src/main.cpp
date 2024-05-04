@@ -1,19 +1,13 @@
 #include <ESP8266mDNS.h>        // Include the mDNS library
 #include <ESP8266WiFi.h>
 
-#define PIN_BATTERY_LEVEL 0
+#define PIN_BATTERY_LEVEL A0
 #define PIN_INTERNAL_LED 2 // indicates if connected with server (low active)
 #define PIN_HAPTIC_LEFT  5 // D1
 #define PIN_HAPTIC_RIGHT 4 // D2
 #define SERVER_PORT 8888
 
 static WiFiServer server(SERVER_PORT);
-
-// number between 0x00(off) and 0xFF(full power)
-static unsigned int haptic_left_level = 0;
-static unsigned int haptic_right_level = 0;
-static unsigned int pwm_number = 0;
-static unsigned int keep_alive = 0;
 
 #if defined(USE_PNP)
 #define HAPTIC_ON LOW
@@ -36,7 +30,7 @@ static unsigned int keep_alive = 0;
  * Battery code taken from SlimeVR Github:
  *  https://github.com/SlimeVR/SlimeVR-Tracker-ESP/blob/main/src/batterymonitor.cpp
  */
-byte getBatteryLevel() {
+float getBatteryLevel() {
   float voltage = ((float)analogRead(PIN_BATTERY_LEVEL)) * ADCVoltageMax / ADCResolution * ADCMultiplier;
   float level = 0.0f;
 
@@ -55,7 +49,7 @@ byte getBatteryLevel() {
   level = (level - 0.05f) / 0.95f;      // Cut off the last 5% (3.36V)
   level = max(min(level, 1.0f), 0.0f);  // Clamp between 0 and 1
 
-  return level * 100;
+  return level;
 }
 
 void setup() {
@@ -67,8 +61,7 @@ void setup() {
   digitalWrite(PIN_HAPTIC_LEFT, HAPTIC_OFF);
   digitalWrite(PIN_HAPTIC_RIGHT, HAPTIC_OFF);
 
-  Serial.begin(115200);
-
+  Serial.begin(9600);
 
   WiFi.mode(WIFI_STA);
   #if defined(WIFI_CREDS_SSID) && defined(WIFI_CREDS_PASSWD)
@@ -114,37 +107,41 @@ void loop() {
   delay(500);
   digitalWrite(PIN_INTERNAL_LED, LOW);
 
-  WiFiClient client = server.available();
+  WiFiClient client = server.accept();
   
   if (client) {
     Serial.println("Client Connected");
-    
+
+    unsigned long previousMillis = millis();
+
     while (client.connected()) {
+      unsigned long currentMillis = millis();
 
       // Process recv byte
       while (client.available() > 0) {
         char data = client.read();
-        haptic_right_level = data & 0x0F;
-        haptic_left_level = data >> 4;
+        unsigned int haptic_right_level = (data & 0x0F) << 4;
+        unsigned int haptic_left_level = data & 0xF0;
+
+        // one channel goes from 0x00 to 0xF0, we add the missing 0x0F to be full range from 0x00 to 0xFF
+        haptic_right_level |= haptic_right_level >> 4;
+        haptic_left_level |= haptic_left_level >> 4;
+
+        // Generates a pwm signal
+        analogWrite(PIN_HAPTIC_LEFT, HAPTIC_OFF ? haptic_left_level : 0xFF - haptic_left_level);
+        analogWrite(PIN_HAPTIC_RIGHT, HAPTIC_OFF ? haptic_right_level : 0xFF - haptic_right_level);
       }
 
-      // create PWM signal for both haptic sensors 
-      digitalWrite(PIN_HAPTIC_LEFT, haptic_left_level > pwm_number ? HAPTIC_OFF : HAPTIC_ON);
-      digitalWrite(PIN_HAPTIC_RIGHT, haptic_right_level > pwm_number ? HAPTIC_OFF : HAPTIC_ON);
-      delayMicroseconds(1);
-
-      if (++pwm_number >= 0xF) {
-        pwm_number = 0;
-      }
-
-      // send keep_alive package every second
-      if (++keep_alive >= 100000) {
-        keep_alive = 0;
+      // Send keep alive packet with averaged battery value
+      if (currentMillis - previousMillis >= 1000) {
+        // send keep_alive package every second
         #if defined(USE_BATTERY)
-        client.print((char)getBatteryLevel());
+        client.print((char)round(max(min(getBatteryLevel() * 100.0f, 100.0f), 0.0f)));
         #else
         client.print((char)255);
         #endif
+
+        previousMillis = currentMillis;
         client.flush();
       }
     }

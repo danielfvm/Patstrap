@@ -44,7 +44,7 @@ class Server():
         self.prev_right = right
 
         self.socket.sendall(struct.pack('B', data))
-        print(str(left) + " " + str(right) + " -> " + str(struct.pack('B', data)))
+        print(f"L: {left}, R: {right}")
 
     def _get_patstrap_ip(self):
         info = None
@@ -58,14 +58,13 @@ class Server():
         return socket.inet_ntoa(info.addresses[0])
 
     def _connect_socket(self):
-        ip_address = self._get_patstrap_ip()
-
-        if ip_address is None:
-            return
-
-        print("Patstrap address found: " + ip_address)
-
         while self.running:
+
+            ip_address = self._get_patstrap_ip()
+            if ip_address is None:
+                break
+            print("Patstrap address found: " + ip_address)
+
             try:
                 self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.socket.settimeout(2)
@@ -79,11 +78,10 @@ class Server():
                 # Wait until connection is closed
                 while True:
                     battery = int.from_bytes(self.socket.recv(1), "big")
-                    print("battery: " + str(battery))
                     if battery != 255: # 255 = no battery
                         self.window.set_battery(battery)
-            except:
-                pass
+            except TimeoutError as e:
+                print("Patstrap timed out!")
 
             self.connected = False
             self.window.set_patstrap_status(False)

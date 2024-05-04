@@ -41,6 +41,7 @@ QSlider {
 
 QSlider::add-page:horizontal {
     background: white;
+    border-radius: 5px;
 }
 
 QSlider::sub-page:horizontal {

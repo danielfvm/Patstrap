@@ -18,15 +18,15 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self, app: QApplication):
         super().__init__()
 
+        self.app = app
         self.slider_strength = None
-
         self.prev_patstrap_status = False
         self.prev_vrchat_status = False
 
-        self.setWindowTitle("Patstrap Server 0.3")
+        self.setWindowTitle("Patstrap Server v0.3")
         with open(resource_path("global.css"), "r") as file:
             self.setStyleSheet(file.read())
 
@@ -104,6 +104,8 @@ class MainWindow(QWidget):
 
         self.status_hardware_battery.setText(f"{percent}%")
         self.status_hardware_battery.setStyleSheet(f"color: {color};")
+        #self.status_hardware_battery.repaint()
+        #self.app.processEvents()
 
     def create_vrchat_status(self):
         box = QWidget()
@@ -208,7 +210,7 @@ class MainWindow(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    window = MainWindow()
+    window = MainWindow(app)
     window.setFixedSize(400, 485)
     window.show()
     sys.exit(app.exec())
