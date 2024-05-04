@@ -24,7 +24,7 @@ For battery support please refer to the [SlimeVR Docs](https://docs.slimevr.dev/
 
 ## Software
 ### Firmware
-For this project to work the ESP8266 needs to be flashed with the necessary firmware. The code is available under `/firmware` and needs to be edited to match your setup. This Project uses [Visual Studio Code](https://code.visualstudio.com/download) and [PlatformIO](https://platformio.org/platformio-ide) to work. Please refer to the [SlimeVR Docs](https://docs.slimevr.dev/firmware/setup-and-install.html) as a reference on how to install the IDE and the extension. After the installation you can download this repository and open the `/firmware` folder in Visual Studio Code.
+The ESP8266's firmware software uses [Visual Studio Code](https://code.visualstudio.com/download) and [PlatformIO](https://platformio.org/platformio-ide). Please refer to the [SlimeVR Docs](https://docs.slimevr.dev/firmware/setup-and-install.html) as a reference on how to install the IDE and the extension. After the installation you can download this repository and open the `/firmware` folder in Visual Studio Code.
 
 Open the `platformio.ini` and change `-DWIFI_CREDS_SSID` and `-DWIFI_CREDS_PASSWD` to your local network's name and password. Keep in mind that it must be the same network your computer is running on in order for the device to communicate with the server program. If you are <ins>not using an ESP8266</ins> you will need to change `board = esp12e` to your board and most likely also the PIN-Layout in the `main.cpp` file. If you want to measure battery level don't forget to uncomment `-DUSE_BATTERY` (remove `;`). If you used a PNP transistor instead of the NPN like BC547b, uncomment `-DUSE_PNP`.
 
