@@ -42,7 +42,7 @@ build_flags = -O2
   -DWIFI_CREDS_SSID='"MyCoolWifi"'
   -DWIFI_CREDS_PASSWD='"password1234"'
 
-; Uncomment below if you use a PNP transistor (eg.: BC557) => inverts the output of the haptic motors
+; Uncomment ONLY if you used a PNP transistor, if you followed the guide you proably want to leave it commented. => inverts the output of the haptic motors
 ;  -DUSE_PNP
 
 ; Uncomment below if you want to measure battery
