@@ -144,7 +144,7 @@ I am grateful for any help, so if you like this project and want to help make it
 * Improved shutdown of server app 
 * Added support for battery measurement
 * Added support in the firmware for both PNP and NPN transistor
-* Improved PWM signal output (uses now builtin function of arduino)
+* Improved PWM signal output (uses now builtin function from arduino)
 * Updated README to match the new setup.
 #### v0.2.1
 * Added `windows-debug.exe` built (opens cmd for additional logs)
