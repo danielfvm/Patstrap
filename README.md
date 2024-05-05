@@ -19,7 +19,7 @@ Both of them can be directly wired to the ESP but for higher performance it is r
 ### Hausing
 The 3D-Model and the `.scad` file of the hausing, which includes some space for the Motor Discs and the ESP8266, is available under `/model` and can be 3D-Printed. Alternatively you can use a normal headband and simply hot glue the Motor Discs and the ESP on a headband.
 ### Battery
-For battery support please refer to the [SlimeVR Docs](https://docs.slimevr.dev/diy/tracker-schematics.html). They use a `TP4056` for charging the battery and powering the device. If you want to measure the battery level you need to add the 180kOhm resistor to Pin A0 (enable `Battery sense` in slimevr docs for circuit diagram). 
+For battery support please refer to the [SlimeVR Docs](https://docs.slimevr.dev/diy/tracker-schematics.html). SlimeVR uses a `TP4056` for charging and powering the device. If you want to measure the battery level you need to add the 180kOhm resistor at Pin A0 (enable `Battery sense` in slimevr docs for circuit diagram). 
 
 
 ## Software
