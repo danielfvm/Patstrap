@@ -135,7 +135,8 @@ I am grateful for any help, so if you like this project and want to help make it
     * Update hardware software accordingly
 * Video and update instructions in `README.md`
 
-
+## Related projects
+* [BS_Patstrap_support](https://github.com/tapafon/BS_Patstrap_support) by tapafon is a mod that adds Patstrap support to Beatsaber 
 
 ## Changelog 
 #### v0.3
