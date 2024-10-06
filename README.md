@@ -10,7 +10,7 @@
 
 An open hardware and software project which tries to implement haptic head pat feedback to the player in VR. This project focuses mainly on VRChat's OSC support but might in the future also support other games. The project consists of a hardware part the "Headpat-Strap" or just "Patstrap", a Server running on the PC and the required edits on a VRChat-Avatar to support the communication over OSC. Keep in mind that this is only a hobby project, but feel free to experiment, edit the code or tweak the hardware to your liking.
 > [!WARNING]
-> This project is in the development phase. Please note that components of the project are subject to frequent changes
+> This project is in the development phase. Please note that components of the project are subject to frequent changes.
 
 
 
@@ -22,13 +22,17 @@ Both of them can be directly wired to the ESP but for higher performance it is r
 
 ![image](/img/circuit.png)
 
-### Hausing (Deprecated, needs to be updated)
+### Hausing
 The 3D-Model and the `.scad` file of the hausing, which includes some space for the Motor Discs and the ESP8266, is available under `/model` and can be 3D-Printed. Alternatively you can use a normal headband and simply hot glue the Motor Discs and the ESP on a headband.
+> [!WARNING]
+> The models in `/model` are not up to date and might not fit anymore.
+
 ### Battery
 For battery support please refer to the [SlimeVR Docs](https://docs.slimevr.dev/diy/tracker-schematics.html). SlimeVR uses a `TP4056` for charging and powering the device. If you want to measure the battery level you need to add the 180kOhm resistor at Pin A0 (enable `Battery sense` in slimevr docs for circuit diagram). 
-### PCB (Not tested / WIP)
+### PCB
 Optionally you can order a PCB for the Patstrap. The Gerber files required for ordering can be found [here](/pcb). Thanks to The-Prophet for making the PCB.
-
+> [!WARNING]
+> The PCB has not been tested yet and is still a Work In Progress!
 
 ## Software
 ### Firmware
@@ -90,7 +94,7 @@ patstrap.exe --osc-port 1234
 > [!IMPORTANT]
 > Make sure that the `.bat` file is in the same folder as the `.exe` file. Alternatively add the fullpath to the `.exe` in the `.bat` file.
 
-
+If you are using [VRCOSC](https://github.com/VolcanicArts/VRCOSC) you can add the `.exe` to the startup and (if needed) can add the launch arguments there.
 
 ### VRChat
 #### Avatar - Unity
