@@ -19,7 +19,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 class MainWindow(QWidget):
-    def __init__(self, app: QApplication, port: int):
+    def __init__(self, app: QApplication, args):
         super().__init__()
 
         self.app = app
@@ -45,7 +45,7 @@ class MainWindow(QWidget):
         layout.addWidget(self.create_patstrap_battery_status())
         layout.addWidget(self.create_test())
 
-        self.server = Server(self, port)
+        self.server = Server(self, args)
 
         box.setLayout(layout)
         layoutMain.addWidget(box)
@@ -211,12 +211,13 @@ class MainWindow(QWidget):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--port", type=int, default=8888, help="Port to the esp hardware. If you change this, you will also need to change the firmware to be the same number! default: 8888")
+    parser.add_argument("-ep", "--esp-port", type=int, default=8888, help="Port to the esp hardware. If you change this, you will also need to change the firmware to be the same number! default: 8888")
+    parser.add_argument("-op", "--osc-port", type=int, default=9001, help="VRChat's OSC input port. default: 9001")
     args = parser.parse_args()
 
     app = QApplication(sys.argv)
 
-    window = MainWindow(app, args.port)
+    window = MainWindow(app, args)
     window.setFixedSize(400, 485)
     window.show()
     sys.exit(app.exec())

@@ -2,16 +2,17 @@ from zeroconf import Zeroconf
 from pythonosc.osc_server import BlockingOSCUDPServer
 from pythonosc.dispatcher import Dispatcher
 
+import argparse
 import threading
 import struct
 import socket
 import time
 
 class Server():
-    def __init__(self, window, port) -> None:
+    def __init__(self, window, args) -> None:
         self.window = window
         self.running = True
-        self.port = port
+        self.args = args
         self.reset()
         threading.Thread(target=self._connect_socket, args=()).start()
         threading.Thread(target=self._connect_osc, args=()).start()
@@ -64,13 +65,14 @@ class Server():
             ip_address = self._get_patstrap_ip()
             if ip_address is None:
                 break
+
             print("Patstrap address found: " + ip_address)
-            print("Try connecting at port: " + str(self.port))
+            print("Try connecting at port: " + str(self.args.esp_port))
 
             try:
                 self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.socket.settimeout(2)
-                self.socket.connect((ip_address, self.port))
+                self.socket.connect((ip_address, self.args.esp_port))
                 self.connected = True
                 self.set_pat(0, 0)
 
@@ -136,7 +138,7 @@ class Server():
         dispatcher.map("/avatar/parameters/pat_left", _hit_collider_left)
         dispatcher.map("/avatar/parameters/*", _recv_packet)
 
-        self.osc = BlockingOSCUDPServer(("127.0.0.1", 9001), dispatcher)
+        self.osc = BlockingOSCUDPServer(("127.0.0.1", self.args.osc_port), dispatcher)
         print("OSC serving on {}".format(self.osc.server_address)) # While server is active, receive messages
         self.osc.serve_forever()
 
