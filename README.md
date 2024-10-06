@@ -3,7 +3,7 @@
 <p align="center">
     <a href="#" alt="size"><img alt="Repository size" src="https://img.shields.io/github/repo-size/danielfvm/Patstrap?color=39d45f"></a>
     <a href="//github.com/danielfvm/Patstrap/commits/master" alt="commit"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/danielfvm/Patstrap?color=39d45f"></a>
-    <a href="//github.com/danielfvm/Patstrap/commits/refactor/" alt="Commits"><img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/danielfvm/Patstrap/refactor"></a>
+    <a href="//github.com/danielfvm/Patstrap/commits/master/" alt="Commits"><img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/danielfvm/Patstrap/master"></a>
     <a href="//github.com/danielfvm/Patstrap?tab=GPL-3.0-1-ov-file#readme" alt="licence"><img alt="GitHub License" src="https://img.shields.io/github/license/danielfvm/Patstrap"></a>
     <a href="#" alt="stars"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/danielfvm/Patstrap"></a>
 </p>
