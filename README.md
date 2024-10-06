@@ -116,7 +116,7 @@ After you uploaded your avatar and enabled osc support, the `VRChat connection` 
 
 
 ## Contribute
-I am grateful for any help, so if you like this project and want to help make it better feel free to make a `pull request`, share your opinions, ideas or problems in `issues`. If you want to help but have no idea what needs to be done, here some general details: 
+I am grateful for any help, so if you like this project and want to help make it better feel free to make a [pull request](https://github.com/danielfvm/Patstrap/pulls), share your opinions, ideas or problems in `issues`. If you want to help but have no idea what needs to be done, here some general details: 
 
 ### Goals
 * Designing a hardware that is cheap and easy for others to replicate.
@@ -136,7 +136,9 @@ I am grateful for any help, so if you like this project and want to help make it
 * Video and update instructions in `README.md`
 
 ## Related projects
-* [BS_Patstrap_support](https://github.com/tapafon/BS_Patstrap_support) by tapafon is a mod that adds Patstrap support to Beatsaber 
+* [BS_Patstrap_support](https://github.com/tapafon/BS_Patstrap_support) by tapafon is a IPA mod that adds Patstrap support to Beatsaber 
+* [SR_Patstrap_support](https://github.com/tapafon/SR_Patstrap_support) by tapafon is a Melon mod that adds Patstrap support to Synth Riders 
+* [HapticPatPat](https://github.com/kikookraft/HapticPatPat) by kikookraft is a fork that adds Bluetooth support for lower latency
 
 ## Changelog 
 #### v0.3
