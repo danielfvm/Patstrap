@@ -15,6 +15,19 @@ An open hardware and software project which tries to implement haptic head pat f
 
 
 ## Hardware
+### Components
+To make this project you will need:
+- [ESP8266](https://amzn.eu/d/bY3lHOE)
+- 2x [150Ω resistors](https://aliexpress.com/item/1005006362959267.html)
+- 2x [Transistors](https://aliexpress.com/item/1005005755402536.html)
+- 2x [vibrating motors](https://aliexpress.com/item/1005001446097852.html)
+
+And optionally if you are using a battery:
+- 2x [Diodes](https://aliexpress.com/item/1005006054373731.html)
+- [battery](https://www.amazon.com/dp/B0B7N2T1TD?psc=1&ref=ppx_yo2ov_dt_b_product_details)
+- [battery charger](https://de.aliexpress.com/item/1005006274938832.html)
+- [on/off switch](https://aliexpress.com/item/1005003938856402.html)
+
 ### Electronics
 An ESP8266 was used for this project, but can be switched with any other WLAN-capable IC.
 For the haptic feedback two [Vibrating Mini Motor Disc](https://www.adafruit.com/product/1201) from Adafruit were used for a 3D spaced feedback on the head.
