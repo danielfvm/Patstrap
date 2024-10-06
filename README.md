@@ -1,6 +1,6 @@
 # Patstrap
 
-<p align="center">
+<p>
     <a href="#" alt="size"><img alt="Repository size" src="https://img.shields.io/github/repo-size/danielfvm/Patstrap?color=39d45f"></a>
     <a href="//github.com/danielfvm/Patstrap/commits/master" alt="commit"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/danielfvm/Patstrap?color=39d45f"></a>
     <a href="//github.com/danielfvm/Patstrap/commits/master/" alt="Commits"><img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/danielfvm/Patstrap/master"></a>
@@ -15,18 +15,18 @@ An open hardware and software project which tries to implement haptic head pat f
 
 
 ## Hardware
-### Components
+### Parts
 To make this project you will need:
-- [ESP8266](https://amzn.eu/d/bY3lHOE)
-- 2x [150Ω resistors](https://aliexpress.com/item/1005006362959267.html)
-- 2x [Transistors](https://aliexpress.com/item/1005005755402536.html)
-- 2x [vibrating motors](https://aliexpress.com/item/1005001446097852.html)
+- [ESP8266](https://amzn.eu/d/bY3lHOE) If you use a different ESP, you may need to change the pins in the code.
+- 2x [150Ω Resistors](https://aliexpress.com/item/1005006362959267.html)
+- 2x [Transistors](https://aliexpress.com/item/1005005755402536.html)  (I used BC547)
+- 2x [Vibrating motors](https://aliexpress.com/item/1005001446097852.html)
 
 And optionally if you are using a battery:
 - 2x [Diodes](https://aliexpress.com/item/1005006054373731.html)
-- [battery](https://www.amazon.com/dp/B0B7N2T1TD?psc=1&ref=ppx_yo2ov_dt_b_product_details)
-- [battery charger](https://de.aliexpress.com/item/1005006274938832.html)
-- [on/off switch](https://aliexpress.com/item/1005003938856402.html)
+- [Battery](https://www.amazon.com/dp/B0B7N2T1TD?psc=1&ref=ppx_yo2ov_dt_b_product_details)
+- [Battery charger](https://de.aliexpress.com/item/1005006274938832.html)
+- [On/Off switch](https://aliexpress.com/item/1005003938856402.html)
 
 ### Electronics
 An ESP8266 was used for this project, but can be switched with any other WLAN-capable IC.
