@@ -5,9 +5,12 @@
 #define PIN_INTERNAL_LED 2 // indicates if connected with server (low active)
 #define PIN_HAPTIC_LEFT  5 // D1
 #define PIN_HAPTIC_RIGHT 4 // D2
-#define SERVER_PORT 8888
 
-static WiFiServer server(SERVER_PORT);
+#if defined(PORT)
+static WiFiServer server(PORT);
+#else
+#error "Missing -DPORT option in platformio.ini"
+#endif
 
 #if defined(USE_PNP)
 #define HAPTIC_ON LOW
@@ -67,7 +70,7 @@ void setup() {
   #if defined(WIFI_CREDS_SSID) && defined(WIFI_CREDS_PASSWD)
     WiFi.begin(WIFI_CREDS_SSID, WIFI_CREDS_PASSWD); //Connect to wifi
   #else
-    #error "Missing defines WIFI_CREDS_SSID and WIFI_CREDS_PASSWD"
+    #error "Missing -DWIFI_CREDS_SSID and -DWIFI_CREDS_PASSWD options in platformio.ini"
   #endif
  
   // Wait for connection  
