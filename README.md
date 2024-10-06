@@ -1,10 +1,16 @@
-# Patstrap (work in progress)
-![Repository size](https://img.shields.io/github/repo-size/danielfvm/Patstrap?color=39d45f) 
-[![GitHub last commit](https://img.shields.io/github/last-commit/danielfvm/Patstrap?color=39d45f)](https://github.com/danielfvm/Patstrap/commits/master) 
-![License](https://img.shields.io/badge/license-GPL-39d45f) 
-[![Stargazers](https://img.shields.io/github/stars/danielfvm/Patstrap?color=39d45f&logo=github)](https://github.com/danielfvm/Patstrap/stargazers)
+# Patstrap
+
+<p align="center">
+    <a href="#" alt="size"><img alt="Repository size" src="https://img.shields.io/github/repo-size/danielfvm/Patstrap?color=39d45f"></a>
+    <a href="//github.com/danielfvm/Patstrap/commits/master" alt="commit"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/danielfvm/Patstrap?color=39d45f"></a>
+    <a href="//github.com/danielfvm/Patstrap/commits/refactor/" alt="Commits"><img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/danielfvm/Patstrap/refactor"></a>
+    <a href="//github.com/danielfvm/Patstrap?tab=GPL-3.0-1-ov-file#readme" alt="licence"><img alt="GitHub License" src="https://img.shields.io/github/license/danielfvm/Patstrap"></a>
+    <a href="#" alt="stars"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/danielfvm/Patstrap"></a>
+</p>
 
 An open hardware and software project which tries to implement haptic head pat feedback to the player in VR. This project focuses mainly on VRChat's OSC support but might in the future also support other games. The project consists of a hardware part the "Headpat-Strap" or just "Patstrap", a Server running on the PC and the required edits on a VRChat-Avatar to support the communication over OSC. Keep in mind that this is only a hobby project, but feel free to experiment, edit the code or tweak the hardware to your liking.
+> [!WARNING]
+> This project is in the development phase. Please note that components of the project are subject to frequent changes
 
 
 
@@ -14,12 +20,14 @@ An ESP8266 was used for this project, but can be switched with any other WLAN-ca
 For the haptic feedback two [Vibrating Mini Motor Disc](https://www.adafruit.com/product/1201) from Adafruit were used for a 3D spaced feedback on the head.
 Both of them can be directly wired to the ESP but for higher performance it is recommended to switch them with two transistors like the BC547b.
 
-![image](https://github.com/danielfvm/Patstrap/assets/23420640/da269697-d692-4068-acf2-a8210f8bc7d0)
+![image](/img/circuit.png)
 
-### Hausing
+### Hausing (Deprecated, needs to be updated)
 The 3D-Model and the `.scad` file of the hausing, which includes some space for the Motor Discs and the ESP8266, is available under `/model` and can be 3D-Printed. Alternatively you can use a normal headband and simply hot glue the Motor Discs and the ESP on a headband.
 ### Battery
 For battery support please refer to the [SlimeVR Docs](https://docs.slimevr.dev/diy/tracker-schematics.html). SlimeVR uses a `TP4056` for charging and powering the device. If you want to measure the battery level you need to add the 180kOhm resistor at Pin A0 (enable `Battery sense` in slimevr docs for circuit diagram). 
+### PCB (Not tested / WIP)
+Optionally you can order a PCB for the Patstrap. The Gerber files required for ordering can be found [here](/pcb). Thanks to The-Prophet for making the PCB.
 
 
 ## Software
@@ -57,7 +65,7 @@ upload_speed = 921600
 ```
 After your edits you can plug-in your ESP, press build (✓) and flash (→) it. You can find the buttons in Visual Studio Code at the bottom on the left side.
 
-![image](https://github.com/danielfvm/Patstrap/assets/23420640/beaee4ad-d02e-4107-bf20-3b0c8394fff7)
+![image](/img/flash.png)
 
 ### Server
 Under releases you can find the binary files to run the server on your computer. The server is the middle man that allows communication between the device and VRChat. The server supports both Windows and Linux. The server opens up a window where the current connection status is displayed. If flashing the hardware worked and the device is running you should see the text `connected`. You can also verify the connection by looking at the ESP-LED.
@@ -68,7 +76,21 @@ Under releases you can find the binary files to run the server on your computer.
 
 If connection was successful `Patstrap connection` should turn green. Furthermore you can now test the hardware by clicking `Pat left` and `Pat right`.
 
-![image](https://github.com/danielfvm/Patstrap/assets/23420640/ff38d10e-13a5-4d25-92e3-75bdac42c795)
+![image](/img/gui.png)
+
+#### Port
+You can change the OSC Port as well as the Port to the ESP by adding a launch argument. 
+To change the OSC port start the server using the cmd and enter `patstrap.exe --osc-port 1234`. 
+To change the ESP port enter `patstrap.exe --esp-port 1234` instead, but make sure that you also change the port in the `platformio.ini` file.
+If you dont want to manually set the port everytime you start the server you can create a `.bat` file with the following content:
+```
+@echo off
+patstrap.exe --osc-port 1234
+```
+> [!IMPORTANT]
+> Make sure that the `.bat` file is in the same folder as the `.exe` file. Alternatively add the fullpath to the `.exe` in the `.bat` file.
+
+
 
 ### VRChat
 #### Avatar - Unity
@@ -78,19 +100,19 @@ For the Patstrap to work you will need to [enable OSC Support in VRChat](https:/
 
     First open up your Avatar in Unity, go to `armature -> Hips -> Spine -> Chest -> Neck -> Head` and add two `Empty` objects as a child of the head. It should look like the following image. Optionally you can rename them for better organization.
    
-    ![image](https://github.com/danielfvm/Patstrap/assets/23420640/520a7821-0146-4770-a49b-028987a2f8cc)
+    ![image](/img/empties.png)
 
 2. Add Contact Receivers 
 
     Open up the just added objects and click on `Add Component` and select `VRC Contact Receiver`. 
     
-    ![image](https://github.com/danielfvm/Patstrap/assets/23420640/79c20c5a-a77a-45f2-b334-a744d7d8230b)
+    ![image](/img/receivers.png)
 
 3. Positioning 
 
     Now move the contact receivers to your left and right of your avatar's head. Change the size and form if required. The position and size should resemble the following.
     
-    ![image](https://github.com/danielfvm/Patstrap/assets/23420640/46c971fd-c8a5-476f-8a55-a8563d6591f7)
+    ![image](/img/positioning.png)
 
 4. Configure Contact Receivers
 
@@ -100,8 +122,8 @@ For the Patstrap to work you will need to [enable OSC Support in VRChat](https:/
 
     The end result should look similar to the following image. Repeat this step for the other two contact receivers.
     
-    ![image](https://github.com/danielfvm/Patstrap/assets/23420640/7b309612-dcd8-4122-aa49-7cbfa56223e9)
-   
+    ![image](/img/configure.png)
+
 5. Upload
 
     Now you should be ready to test and upload your avatar.
