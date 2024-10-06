@@ -8,9 +8,10 @@ import socket
 import time
 
 class Server():
-    def __init__(self, window) -> None:
+    def __init__(self, window, port) -> None:
         self.window = window
         self.running = True
+        self.port = port
         self.reset()
         threading.Thread(target=self._connect_socket, args=()).start()
         threading.Thread(target=self._connect_osc, args=()).start()
@@ -64,11 +65,12 @@ class Server():
             if ip_address is None:
                 break
             print("Patstrap address found: " + ip_address)
+            print("Try connecting at port: " + str(self.port))
 
             try:
                 self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.socket.settimeout(2)
-                self.socket.connect((ip_address, 8888))
+                self.socket.connect((ip_address, self.port))
                 self.connected = True
                 self.set_pat(0, 0)
 

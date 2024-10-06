@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLa
 from PyQt6.QtCore import Qt
 from server import Server
 
+import argparse
 import time
 import sys
 import os
@@ -18,7 +19,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 class MainWindow(QWidget):
-    def __init__(self, app: QApplication):
+    def __init__(self, app: QApplication, port: int):
         super().__init__()
 
         self.app = app
@@ -44,7 +45,7 @@ class MainWindow(QWidget):
         layout.addWidget(self.create_patstrap_battery_status())
         layout.addWidget(self.create_test())
 
-        self.server = Server(self)
+        self.server = Server(self, port)
 
         box.setLayout(layout)
         layoutMain.addWidget(box)
@@ -208,9 +209,14 @@ class MainWindow(QWidget):
         self.server.shutdown()
 
 if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", "--port", type=int, default=8888, help="Port to the esp hardware. If you change this, you will also need to change the firmware to be the same number! default: 8888")
+    args = parser.parse_args()
+
     app = QApplication(sys.argv)
 
-    window = MainWindow(app)
+    window = MainWindow(app, args.port)
     window.setFixedSize(400, 485)
     window.show()
     sys.exit(app.exec())
