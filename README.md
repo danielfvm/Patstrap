@@ -64,15 +64,17 @@ framework = arduino
 build_unflags = -Os
 build_flags = -O2
 ; Set your wifi name and password here - Make sure it's within the same Network as the server software!
-  -DWIFI_CREDS_SSID='"MyCoolWifi"'
-  -DWIFI_CREDS_PASSWD='"password1234"'
+  -DWIFI_CREDS_SSID='"WIFI_NAME"'
+  -DWIFI_CREDS_PASSWD='"WIFI_PASSWORD"'
 
-; Uncomment ONLY if you used a PNP transistor, if you followed the guide you proably want to leave it commented. => inverts the output of the haptic motors
+; Uncomment below if you used a PNP transistor, if you followed the guide you proably want to leave it commented. => inverts the output of the haptic motors
 ;  -DUSE_PNP
 
-; Uncomment below if you want to measure battery
-  -DUSE_BATTERY
+; Uncomment below if you use a battery
+;  -DUSE_BATTERY
 
+; The port used to communicate to the patstrap server, if you change this you will also need to change the --esp-port in the server software
+  -DPORT='8080'
 
 [env:esp12e]
 platform = espressif8266
