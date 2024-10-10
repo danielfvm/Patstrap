@@ -27,7 +27,7 @@ class MainWindow(QWidget):
         self.prev_patstrap_status = False
         self.prev_vrchat_status = False
 
-        self.setWindowTitle("Patstrap Server v0.4")
+        self.setWindowTitle("Patstrap Server v0.3")
         with open(resource_path("global.css"), "r") as file:
             self.setStyleSheet(file.read())
 
