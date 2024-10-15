@@ -11,3 +11,4 @@ PyQt6-sip==13.6.0
 python-osc==1.8.3
 tomlkit==0.12.4
 zeroconf==0.132.2
+git+https://github.com/cyberkitsune/tinyoscquery.git@0.1.2#egg=tinyoscquery

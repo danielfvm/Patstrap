@@ -1,12 +1,20 @@
 from zeroconf import Zeroconf
 from pythonosc.osc_server import BlockingOSCUDPServer
 from pythonosc.dispatcher import Dispatcher
+from tinyoscquery.queryservice import OSCQueryService
+from tinyoscquery.utility import get_open_tcp_port, get_open_udp_port
 
 import argparse
 import threading
 import struct
 import socket
 import time
+
+def start_oscquery(server_udp_port, server_tcp_port):
+    def start_server():
+        oscquery_server = OSCQueryService("Patstrap", server_tcp_port, server_udp_port)
+        oscquery_server.advertise_endpoint("/avatar")
+    return start_server
 
 class Server():
     def __init__(self, window, args) -> None:
@@ -133,13 +141,20 @@ class Server():
         def _recv_packet(_, value):
             self.keepAliveTimeout = time.time() + 2
 
+        if not self.args.no_osc_query:
+            server_udp_port = get_open_udp_port()
+            server_tcp_port = get_open_tcp_port()
+            threading.Thread(target=start_oscquery(server_udp_port, server_tcp_port),
+                         daemon=True).start()
+        else:
+            server_udp_port = self.args.osc_port
         dispatcher = Dispatcher()
         dispatcher.map("/avatar/parameters/pat_right", _hit_collider_right)
         dispatcher.map("/avatar/parameters/pat_left", _hit_collider_left)
         dispatcher.map("/avatar/parameters/*", _recv_packet)
 
-        self.osc = BlockingOSCUDPServer(("127.0.0.1", self.args.osc_port), dispatcher)
-        print("OSC serving on {}".format(self.osc.server_address)) # While server is active, receive messages
+        self.osc = BlockingOSCUDPServer(("127.0.0.1", server_udp_port), dispatcher)
+        print("OSC serving on {}".format(server_udp_port)) # While server is active, receive messages
         self.osc.serve_forever()
 
     def shutdown(self):
