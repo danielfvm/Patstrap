@@ -17,13 +17,14 @@ An open hardware and software project which tries to implement haptic head pat f
 ## Hardware
 ### Parts
 To make this project you will need:
-- [ESP8266](https://amzn.eu/d/bY3lHOE) If you use a different ESP, you may need to change the pins in the code.
-- 2x [150Ω Resistors](https://aliexpress.com/item/1005006362959267.html)
-- 2x [Transistors](https://aliexpress.com/item/1005005755402536.html)  (I used BC547)
+- [ESP8266 WEMOS D1 Mini V4.0.0](https://aliexpress.com/item/1005006246661815.html) If you use a different ESP, you may need to change the pins in the code.
+- 2x [150KΩ Resistors](https://aliexpress.com/item/1005001627995396.html)
+- 2x [Transistors](https://aliexpress.com/item/1005003450640801.html)  (I used BC547)
 - 2x [Vibrating motors](https://aliexpress.com/item/1005001446097852.html)
 
 And optionally if you are using a battery:
-- 2x [Diodes](https://aliexpress.com/item/1005006054373731.html)
+- 1x [180KΩ Resistors](https://de.aliexpress.com/item/1005001627995396.html)
+- 2x [Diodes 1N5817](https://de.aliexpress.com/item/1005002620053985.html)
 - [Battery](https://www.amazon.com/dp/B0B7N2T1TD?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 - [Battery charger](https://de.aliexpress.com/item/1005006274938832.html)
 - [On/Off switch](https://aliexpress.com/item/1005003938856402.html)
@@ -33,7 +34,7 @@ An ESP8266 was used for this project, but can be switched with any other WLAN-ca
 For the haptic feedback two [Vibrating Mini Motor Disc](https://www.adafruit.com/product/1201) from Adafruit were used for a 3D spaced feedback on the head.
 Both of them can be directly wired to the ESP but for higher performance it is recommended to switch them with two transistors like the BC547b.
 
-![image](/img/circuit.png)
+![Untitled Sketch_Steckplatine](https://github.com/user-attachments/assets/243acea6-37cc-4932-948d-9416ec73516d)
 
 ### Hausing
 The 3D-Model and the `.scad` file of the hausing, which includes some space for the Motor Discs and the ESP8266, is available under `/model` and can be 3D-Printed. Alternatively you can use a normal headband and simply hot glue the Motor Discs and the ESP on a headband.
