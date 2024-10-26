@@ -158,12 +158,12 @@ After you uploaded your avatar and enabled osc support, the `VRChat connection` 
 
 
 ## Contribute
-I am grateful for any help, so if you like this project and want to help make it better feel free to make a [pull request](https://github.com/danielfvm/Patstrap/pulls), share your opinions, ideas or problems in `issues`. If you want to help but have no idea what needs to be done, here some general details: 
+I am grateful for any help, so if you like this project and want to help make it better feel free to make a [pull request](https://github.com/danielfvm/Patstrap/pulls), share your opinions, ideas or problems in [issues](https://github.com/danielfvm/Patstrap/issues). If you want to help but have no idea what needs to be done, here some general details: 
 
 ### Goals
 * Designing a hardware that is cheap and easy for others to replicate.
 * Electronic components should idealy be available on stores like amazon.
-* Documenting every step necessary to reproduce hardware / software.
+* Documenting every step necessary to build the hardware and setup the software.
 
 ### TODO's and Issues
 * Design casing for ESP
