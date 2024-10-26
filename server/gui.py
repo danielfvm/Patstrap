@@ -211,9 +211,7 @@ class MainWindow(QWidget):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-ep", "--esp-port", type=int, default=8888, help="Port to the esp hardware. If you change this, you will also need to change the firmware to be the same number! default: 8888")
-    parser.add_argument("-op", "--osc-port", type=int, default=9001, help="VRChat's OSC input port (Not used with OSCQuery). default: 9001")
-    parser.add_argument("-noq", "--no-osc-query", action="store_true", default=False, help="Disable OSCQuery and use --osc-port instead. default: False")
+    parser.add_argument("-p", "--port", type=int, default=None, help="VRChat's OSC input port, by default uses OSCQuery to determine port")
     args = parser.parse_args()
 
     app = QApplication(sys.argv)

@@ -178,9 +178,11 @@ I am grateful for any help, so if you like this project and want to help make it
 * Video and update instructions in `README.md`
 
 ## Related projects
+Some related projects that I found interesting:
 * [BS_Patstrap_support](https://github.com/tapafon/BS_Patstrap_support) by tapafon is a IPA mod that adds Patstrap support to Beatsaber 
 * [SR_Patstrap_support](https://github.com/tapafon/SR_Patstrap_support) by tapafon is a Melon mod that adds Patstrap support to Synth Riders 
 * [HapticPatPat](https://github.com/kikookraft/HapticPatPat) by kikookraft is a fork that adds Bluetooth support for lower latency
+* [Patstrap-Multi-Version-DE](https://github.com/LucyWolf/Patstrap-Multi-Version-DE) by LucyWolf is a german translated version of Patstrap
 
 ## Changelog 
 #### v0.3

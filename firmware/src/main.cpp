@@ -91,7 +91,7 @@ void setup() {
   if (!MDNS.begin("patstrap")) {
     Serial.println("Error setting up MDNS responder!");
   }
-  MDNS.addService("http", "tcp", 80);
+  MDNS.addService("http", "tcp", PORT);
   Serial.println("mDNS responder started");
 
 

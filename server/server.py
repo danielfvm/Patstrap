@@ -56,7 +56,7 @@ class Server():
         self.socket.sendall(struct.pack('B', data))
         print(f"L: {left}, R: {right}")
 
-    def _get_patstrap_ip(self):
+    def _find_patstrap(self):
         info = None
         while not info and self.running:
             info = Zeroconf().get_service_info("_http._tcp.local.", "patstrap._http._tcp.local.")
@@ -65,22 +65,20 @@ class Server():
         if not self.running:
             return None
 
-        return socket.inet_ntoa(info.addresses[0])
+        return (socket.inet_ntoa(info.addresses[0]), info.port)
 
     def _connect_socket(self):
         while self.running:
-
-            ip_address = self._get_patstrap_ip()
-            if ip_address is None:
+            (ip, port) = self._find_patstrap()
+            if ip is None or port is None:
                 break
 
-            print("Patstrap address found: " + ip_address)
-            print("Try connecting at port: " + str(self.args.esp_port))
+            print(f"Patstrap address found {ip}:{port}")
 
             try:
                 self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.socket.settimeout(2)
-                self.socket.connect((ip_address, self.args.esp_port))
+                self.socket.connect((ip, port))
                 self.connected = True
                 self.set_pat(0, 0)
 
@@ -100,7 +98,7 @@ class Server():
             self.reset()
 
             if self.running:
-                print(f"Try reconnecting to patstrap at {ip_address}")
+                print(f"Try reconnecting to patstrap at {ip}")
                 time.sleep(3)
 
         print("Disconnected")
@@ -141,13 +139,13 @@ class Server():
         def _recv_packet(_, value):
             self.keepAliveTimeout = time.time() + 2
 
-        if not self.args.no_osc_query:
+        if self.args.port:
+            server_udp_port = self.args.port
+        else:
             server_udp_port = get_open_udp_port()
             server_tcp_port = get_open_tcp_port()
-            threading.Thread(target=start_oscquery(server_udp_port, server_tcp_port),
-                         daemon=True).start()
-        else:
-            server_udp_port = self.args.osc_port
+            threading.Thread(target=start_oscquery(server_udp_port, server_tcp_port), daemon=True).start()
+
         dispatcher = Dispatcher()
         dispatcher.map("/avatar/parameters/pat_right", _hit_collider_right)
         dispatcher.map("/avatar/parameters/pat_left", _hit_collider_left)
