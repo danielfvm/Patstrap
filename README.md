@@ -183,8 +183,12 @@ Some related projects that I found interesting:
 * [SR_Patstrap_support](https://github.com/tapafon/SR_Patstrap_support) by tapafon is a Melon mod that adds Patstrap support to Synth Riders 
 * [HapticPatPat](https://github.com/kikookraft/HapticPatPat) by kikookraft is a fork that adds Bluetooth support for lower latency
 * [Patstrap-Multi-Version-DE](https://github.com/LucyWolf/Patstrap-Multi-Version-DE) by LucyWolf is a german translated version of Patstrap
+* [headpat-vr](https://github.com/Mercuso/headpat-vr) by Mercuso is a device that brings tactile feelings of VR head pats using mechanical force applied by brushes
 
 ## Changelog 
+#### v0.5
+* Fixed vrchat indicator not updating when patstrap is not connected
+* Added OSCQuery (by [lcb01a](https://github.com/lcb01a))
 #### v0.3
 * Changed design of server app
 * Hardware reconnecting to server should work now (also with different IP)
