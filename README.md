@@ -1,11 +1,11 @@
 # Patstrap
 
 <p>
-    <a href="#" alt="size"><img alt="Repository size" src="https://img.shields.io/github/repo-size/danielfvm/Patstrap?color=39d45f"></a>
-    <a href="//github.com/danielfvm/Patstrap/commits/master" alt="commit"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/danielfvm/Patstrap?color=39d45f"></a>
-    <a href="//github.com/danielfvm/Patstrap/commits/master/" alt="Commits"><img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/danielfvm/Patstrap/master"></a>
-    <a href="//github.com/danielfvm/Patstrap?tab=GPL-3.0-1-ov-file#readme" alt="licence"><img alt="GitHub License" src="https://img.shields.io/github/license/danielfvm/Patstrap"></a>
-    <a href="#" alt="stars"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/danielfvm/Patstrap"></a>
+    <a href="#" alt="size"><img alt="Repository size" src="https://img.shields.io/github/repo-size/ItsKaedeV/Patstrap?color=39d45f"></a>
+    <a href="//github.com/ItsKaedeV/Patstrap/commits/master" alt="commit"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/ItsKaedeV/Patstrap?color=39d45f"></a>
+    <a href="//github.com/ItsKaedeV/Patstrap/commits/master/" alt="Commits"><img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/ItsKaedeV/Patstrap/master"></a>
+    <a href="//github.com/ItsKaedeV/Patstrap?tab=GPL-3.0-1-ov-file#readme" alt="licence"><img alt="GitHub License" src="https://img.shields.io/github/license/ItsKaedeV/Patstrap"></a>
+    <a href="#" alt="stars"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/ItsKaedeV/Patstrap"></a>
 </p>
 
 An open hardware and software project which tries to implement haptic head pat feedback to the player in VR. This project focuses mainly on VRChat's OSC support but might in the future also support other games. The project consists of a hardware part the "Headpat-Strap" or just "Patstrap", a Server running on the PC and the required edits on a VRChat-Avatar to support the communication over OSC. Keep in mind that this is only a hobby project, but feel free to experiment, edit the code or tweak the hardware to your liking.
@@ -153,12 +153,12 @@ After you uploaded your avatar and enabled osc support, the `VRChat connection` 
 1. Check if the parameters `pat_right` and `pat_left` were added to your uploaded avatar. You can find the json file at `~\AppData\LocalLow\VRChat\VRChat\OSC\{userId}\Avatars\{avatarId}.json`. If that is not the case, make sure the Avatar setup step was done correctly. For more information you can also check [VRChat's docs](https://docs.vrchat.com/docs/osc-avatar-parameters).
 2. Use [Protokol](https://hexler.net/protokol) for debugging and check if `pat_left` or `pat_right` appear in the log. Make sure you set the port to the port used by [VRChat (default 9001)](https://docs.vrchat.com/docs/osc-overview).
 3. Start Patstrap Server in the CMD and look for error messages.
-4. If nothing worked feel free to file an [issue](https://github.com/danielfvm/Patstrap/issues) or ask me on the [Discord Server](https://discord.gg/QsuHQXECw2) or write me directly at `DeanCode#3641`.
+4. If nothing worked feel free to file an [issue](https://github.com/ItsKaedeV/Patstrap/issues) or ask me on the [Discord Server](https://discord.gg/QsuHQXECw2) or write me directly at `DeanCode#3641`.
 
 
 
 ## Contribute
-I am grateful for any help, so if you like this project and want to help make it better feel free to make a [pull request](https://github.com/danielfvm/Patstrap/pulls), share your opinions, ideas or problems in [issues](https://github.com/danielfvm/Patstrap/issues). If you want to help but have no idea what needs to be done, here some general details: 
+I am grateful for any help, so if you like this project and want to help make it better feel free to make a [pull request](https://github.com/ItsKaedeV/Patstrap/pulls), share your opinions, ideas or problems in [issues](https://github.com/ItsKaedeV/Patstrap/issues). If you want to help but have no idea what needs to be done, here some general details: 
 
 ### Goals
 * Designing a hardware that is cheap and easy for others to replicate.
