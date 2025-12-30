@@ -18,7 +18,7 @@ An open hardware and software project which tries to implement haptic head pat f
 ### Parts
 To make this project you will need:
 - [ESP8266 WEMOS D1 Mini V4.0.0](https://aliexpress.com/item/1005006246661815.html) If you use a different ESP, you may need to change the pins in the code.
-- 2x [150KΩ Resistors](https://aliexpress.com/item/1005001627995396.html)
+- 2x [1KΩ Resistors](https://aliexpress.com/item/1005001627995396.html)
 - 2x [Transistors](https://aliexpress.com/item/1005003450640801.html)  (I used BC547)
 - 2x [Vibrating motors](https://aliexpress.com/item/1005001446097852.html)
 
