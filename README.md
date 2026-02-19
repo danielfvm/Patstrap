@@ -179,6 +179,7 @@ I am grateful for any help, so if you like this project and want to help make it
 
 ## Related projects
 Some related projects that I found interesting:
+* [PatStrap.csharp](https://github.com/verncat/PatStrap.csharp) by verncat is a rewritten PatStrap server in CSharp with performance improvements and support for additional haptics
 * [HapticsExtended](https://github.com/MagicBOTAlex/HapticsExtended) by MagicBOTAlex based on OpenIris and supports multiple haptic devices
 * [BS_Patstrap_support](https://github.com/tapafon/BS_Patstrap_support) by tapafon is a IPA mod that adds Patstrap support to Beatsaber 
 * [SR_Patstrap_support](https://github.com/tapafon/SR_Patstrap_support) by tapafon is a Melon mod that adds Patstrap support to Synth Riders 
