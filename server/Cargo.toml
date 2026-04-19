@@ -1,7 +1,17 @@
 [package]
 name = "patstrap-rs"
+repository = "https://github.com/danielfvm/patstrap"
+description = "Server program that acts as a bridge between VRChat and the patstrap device"
+authors = [ "DeanCode" ]
 version = "0.1.0"
 edition = "2024"
+
+# https://axodotdev.github.io/cargo-dist/book/quickstart/rust.html
+[package.metadata.wix]
+upgrade-guid = "84D954CA-583D-464A-BD2F-EB839C0D1587"
+path-guid = "285D0AC2-7DE2-4DE7-8860-A3C6F05E32AE"
+license = false
+eula = false
 
 [dependencies]
 eframe = "0.33.3"
@@ -23,9 +33,11 @@ env_logger = "0.11"
 planck-pack = "0.1.1"
 async-trait = "0.1.89"
 
-#[profile.release]
-#opt-level = "z"        # Optimize for size ("s" is slightly less aggressive)
-#lto = true             # Link Time Optimization
-#codegen-units = 1      # Better optimization, smaller binary
-#panic = "abort"        # Removes unwinding code
-#strip = true           # Strip symbols (Rust 1.70+)
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
+opt-level = "z"
+codegen-units = 1
+panic = "abort"
+strip = true
