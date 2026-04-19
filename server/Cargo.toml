@@ -1,0 +1,31 @@
+[package]
+name = "patstrap-rs"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+eframe = "0.33.3"
+strum = "0.28"
+strum_macros = "0.28"
+serde = { version = "1.0", features = ["derive"] }
+clap = { version = "4.0", features = ["derive"] }
+serde_json = "1.0.149"
+btleplug = "0.12.0"
+futures-util = "0.3.32"
+tokio = { version = "1.50.0", features = ["full"] }
+uuid = "1.22.0"
+mdns-sd = "0.19.0"
+tokio-util = "0.7.18"
+vrchat_osc = "2"
+anyhow = "1.0.102"
+log = "0.4.29"
+env_logger = "0.11"
+planck-pack = "0.1.1"
+async-trait = "0.1.89"
+
+#[profile.release]
+#opt-level = "z"        # Optimize for size ("s" is slightly less aggressive)
+#lto = true             # Link Time Optimization
+#codegen-units = 1      # Better optimization, smaller binary
+#panic = "abort"        # Removes unwinding code
+#strip = true           # Strip symbols (Rust 1.70+)

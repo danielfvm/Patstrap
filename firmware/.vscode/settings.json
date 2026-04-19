@@ -2,5 +2,12 @@
     "files.associations": {
         "cmath": "cpp",
         "chrono": "cpp"
-    }
+    },
+    "chat.agent.enabled": false,
+    "chat.commandCenter.enabled": false,
+    "inlineChat.accessibleDiffView": "off",
+    "terminal.integrated.initialHint": false,
+    "github.copilot.editor.enableCodeActions": false,
+    "github.copilot.chat.agent.autoFix": false,
+    "github.copilot.chat.agent.currentEditorContext.enabled": false
 }

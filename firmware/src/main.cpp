@@ -1,10 +1,12 @@
-#include <ESP8266mDNS.h>        // Include the mDNS library
+
+#include <ESP8266mDNS.h>
 #include <ESP8266WiFi.h>
+#include <cstdint>
+#include "protocol.hpp"
 
 #define PIN_BATTERY_LEVEL A0
 #define PIN_INTERNAL_LED 2 // indicates if connected with server (low active)
-#define PIN_HAPTIC_LEFT  5 // D1
-#define PIN_HAPTIC_RIGHT 4 // D2
+
 
 #if defined(PORT)
 static WiFiServer server(PORT);
@@ -55,20 +57,66 @@ float getBatteryLevel() {
   return level;
 }
 
+#if defined(HAPTIC_PINS)
+static const std::vector<std::pair<char*, int>> GPIO_HAPTIC_MAPPING = HAPTIC_PINS;
+#else
+  #error "Missing -DHAPTIC_PINS option in platformio.ini"
+#endif
+
+// This here was made because regular analogWrite does not work well to adjust
+// vibration strength. Instead we make a PWM signal where the High signal is
+// long enough to get the motor starting to move (fixed ms length)
+struct HapticPWM {
+  long _duration, _interval;
+  float _strength;
+  int _pin;
+
+  const long HIGH_TIME = 5; // Time in ms of high signal (this is fixed)
+  const long OFF_TIME = 10; // Max time in ms of pause (OFF_TIME * strength)
+
+  void init(int pin) {
+    _pin = pin;
+    _duration = 0;
+    _interval = 0;
+  }
+
+  void set(long durtaion, float strength) {
+    _duration = durtaion;
+    _strength = 1.0 - strength;
+    _interval = 0;
+  }
+
+  void update(unsigned long dt) {
+    if (_duration > 0) {
+      _duration -= dt;
+      _interval += dt;
+    }
+
+    long period = HIGH_TIME + OFF_TIME * _strength;
+    if (_interval > period)
+      _interval = 0;
+
+    bool on = _duration > 0 && _interval <= HIGH_TIME;
+
+    digitalWrite(_pin, on ? HAPTIC_ON : HAPTIC_OFF);
+  }
+};
+
 void setup() {
   pinMode(PIN_INTERNAL_LED, OUTPUT);
-  pinMode(PIN_HAPTIC_LEFT, OUTPUT);
-  pinMode(PIN_HAPTIC_RIGHT, OUTPUT);
   pinMode(PIN_BATTERY_LEVEL, INPUT);
 
-  digitalWrite(PIN_HAPTIC_LEFT, HAPTIC_OFF);
-  digitalWrite(PIN_HAPTIC_RIGHT, HAPTIC_OFF);
+  for (auto& [_, pin] : GPIO_HAPTIC_MAPPING) {
+    pinMode(pin, OUTPUT);
+    digitalWrite(pin, HAPTIC_OFF);
+  }
 
   Serial.begin(9600);
 
+  // Connect to wifi
   WiFi.mode(WIFI_STA);
   #if defined(WIFI_CREDS_SSID) && defined(WIFI_CREDS_PASSWD)
-    WiFi.begin(WIFI_CREDS_SSID, WIFI_CREDS_PASSWD); //Connect to wifi
+    WiFi.begin(WIFI_CREDS_SSID, WIFI_CREDS_PASSWD);
   #else
     #error "Missing -DWIFI_CREDS_SSID and -DWIFI_CREDS_PASSWD options in platformio.ini"
   #endif
@@ -77,15 +125,11 @@ void setup() {
   Serial.println("Connecting to Wifi");
   while (WiFi.status() != WL_CONNECTED) {   
     delay(100);
-    digitalWrite(PIN_INTERNAL_LED, LOW);
+    digitalWrite(PIN_INTERNAL_LED, HIGH);
     Serial.print(".");
     delay(100);
-    digitalWrite(PIN_INTERNAL_LED, HIGH);
+    digitalWrite(PIN_INTERNAL_LED, LOW);
   }
-
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());  
-  server.begin();
 
   // Start the mDNS responder for patstrap.local
   if (!MDNS.begin("patstrap")) {
@@ -94,62 +138,132 @@ void setup() {
   MDNS.addService("http", "tcp", PORT);
   Serial.println("mDNS responder started");
 
-
-  digitalWrite(PIN_HAPTIC_LEFT, HAPTIC_ON);
-  digitalWrite(PIN_HAPTIC_RIGHT, HAPTIC_ON);
+  // Play connection indication by vibrating all motors
+  for (auto& [_, pin] : GPIO_HAPTIC_MAPPING)
+    digitalWrite(pin, HAPTIC_ON);
   delay(500);
-  digitalWrite(PIN_HAPTIC_LEFT, HAPTIC_OFF);
-  digitalWrite(PIN_HAPTIC_RIGHT, HAPTIC_OFF);
+  for (auto& [_, pin] : GPIO_HAPTIC_MAPPING)
+    digitalWrite(pin, HAPTIC_OFF);
+
+
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());  
+  server.begin();
 }
 
 void loop() {
   MDNS.update();
 
-  delay(500);
-  digitalWrite(PIN_INTERNAL_LED, HIGH);
-  delay(500);
-  digitalWrite(PIN_INTERNAL_LED, LOW);
-
-  WiFiClient client = server.accept();
+  WiFiClient client = server.available();
   
   if (client) {
     Serial.println("Client Connected");
+    digitalWrite(PIN_INTERNAL_LED, HIGH);
 
     unsigned long previousMillis = millis();
+    unsigned long keepAliveTimer;
 
+    HapticPWM pwm[GPIO_HAPTIC_MAPPING.size()];
+    for (auto i = 0; i < GPIO_HAPTIC_MAPPING.size(); i++)
+      pwm[i].init(GPIO_HAPTIC_MAPPING[i].second);
+
+    auto reply = [&](CommandClient command) {
+      uint8_t bytes[64];
+      size_t len = command.to_bytes(bytes);
+      client.write(bytes, len);
+    };
+
+    // Send haptic configuration to server
+    for (int channel = 0; channel < GPIO_HAPTIC_MAPPING.size(); channel++) {
+      CommandClient cmd = CommandClient {
+        .tag = Tag::Info,
+        .info = { .channel = (uint8_t)channel },
+      };
+      strcpy(cmd.info.name, GPIO_HAPTIC_MAPPING[channel].first);
+      reply(cmd);
+    }
+    
     while (client.connected()) {
       unsigned long currentMillis = millis();
+      unsigned long dt = currentMillis - previousMillis;
+      previousMillis = currentMillis;
 
-      // Process recv byte
-      while (client.available() > 0) {
-        char data = client.read();
-        unsigned int haptic_right_level = (data & 0x0F) << 4;
-        unsigned int haptic_left_level = data & 0xF0;
+      for (int i = 0; i < GPIO_HAPTIC_MAPPING.size(); i++)
+        pwm[i].update(dt);
 
-        // one channel goes from 0x00 to 0xF0, we add the missing 0x0F to be full range from 0x00 to 0xFF
-        haptic_right_level |= haptic_right_level >> 4;
-        haptic_left_level |= haptic_left_level >> 4;
+      // Process recv bytes
+      uint8_t data[32];
 
-        // Generates a pwm signal
-        analogWrite(PIN_HAPTIC_LEFT, HAPTIC_OFF ? haptic_left_level : 0xFF - haptic_left_level);
-        analogWrite(PIN_HAPTIC_RIGHT, HAPTIC_OFF ? haptic_right_level : 0xFF - haptic_right_level);
+      int len = client.read(data, 32);
+      if (len > 0) {
+        CommandServer command = CommandServer::from_bytes(data, len);
+        switch (command.tag) {
+          case Tag::Info: {
+            for (int channel = 0; channel < GPIO_HAPTIC_MAPPING.size(); channel++) {
+              CommandClient cmd = CommandClient {
+                .tag = Tag::Info,
+                .info = { .channel = (uint8_t)channel },
+              };
+              strcpy(cmd.info.name, GPIO_HAPTIC_MAPPING[channel].first);
+              reply(cmd);
+            }
+          }
+          case Tag::Battery: { 
+            reply(CommandClient {
+              .tag = Tag::Battery,
+              .battery = { .level = (uint8_t)(getBatteryLevel() * 100) },
+            });
+          }
+          case Tag::Haptic: {
+            if (command.haptic.channel < GPIO_HAPTIC_MAPPING.size()) {
+              auto& [name, pin] = GPIO_HAPTIC_MAPPING[command.haptic.channel];
+              uint8_t strength = command.haptic.strength;
+              uint16_t duration = command.haptic.duration;
+  
+              pwm[command.haptic.channel].set(duration, (float)strength / 255.0);
+
+              reply(CommandClient {
+                .tag = Tag::Haptic,
+                .haptic = { .status = 1 },
+              });
+            }
+          }
+          default: {
+            reply(CommandClient {
+              .tag = Tag::Invalid,
+            });
+          }
+        }
       }
+      client.flush();
 
       // Send keep alive packet with averaged battery value
-      if (currentMillis - previousMillis >= 1000) {
-        // send keep_alive package every second
-        #if defined(USE_BATTERY)
-        client.print((char)round(max(min(getBatteryLevel() * 100.0f, 100.0f), 0.0f)));
-        #else
-        client.print((char)255);
-        #endif
+      keepAliveTimer += dt;
+      if (keepAliveTimer >= 3000) {
+        reply(CommandClient {
+          .tag = Tag::Battery,
+          .battery = { .level = (uint8_t)(getBatteryLevel() * 100) },
+        });
 
-        previousMillis = currentMillis;
-        client.flush();
+        keepAliveTimer = 0;
       }
     }
 
+    for (auto i = 0; i < GPIO_HAPTIC_MAPPING.size(); i++)
+      digitalWrite(GPIO_HAPTIC_MAPPING[i].second, HAPTIC_OFF);
+
+    // Disconnection indication blink
+    delay(500);
+    digitalWrite(PIN_INTERNAL_LED, HIGH);
+    delay(500);
+    digitalWrite(PIN_INTERNAL_LED, LOW);
+    delay(500);
+    digitalWrite(PIN_INTERNAL_LED, HIGH);
+    delay(500);
+    digitalWrite(PIN_INTERNAL_LED, LOW);
+
+    // close the connection:
     client.stop();
-    Serial.println("Client disconnected");    
+    Serial.println("Client disconnected");
   }
 }

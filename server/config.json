@@ -1,0 +1,28 @@
+{
+  "devices": {
+    "patstrap._http._tcp.local.": {
+      "auto_connect": false,
+      "haptics": {
+        "1": {
+          "name": "right",
+          "osc_parameter": "/avatar/parameters/pat_right",
+          "strength": 1.0,
+          "channel": 1
+        },
+        "0": {
+          "name": "left",
+          "osc_parameter": "/avatar/parameters/pat_left",
+          "strength": 1.0,
+          "channel": 0
+        }
+      }
+    },
+    "hci0/dev_D8_47_8F_0E_36_30": {
+      "auto_connect": false,
+      "haptics": {}
+    }
+  },
+  "mode": "OSC",
+  "auto_start": false,
+  "header": "Devices"
+}
