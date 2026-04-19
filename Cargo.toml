@@ -3,7 +3,7 @@ name = "patstrap-rs"
 repository = "https://github.com/danielfvm/patstrap"
 description = "Server program that acts as a bridge between VRChat and the patstrap device"
 authors = [ "DeanCode" ]
-version = "0.0.3"
+version = "0.0.4"
 edition = "2024"
 
 # https://axodotdev.github.io/cargo-dist/book/quickstart/rust.html
