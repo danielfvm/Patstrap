@@ -6,7 +6,7 @@ description = "Server program that acts as a bridge between VRChat and the patst
 authors = [ "DeanCode" ]
 license = "GPL-3.0 license"
 license-file = "LICENSE"
-version = "0.0.4"
+version = "0.0.5"
 edition = "2024"
 
 # https://axodotdev.github.io/cargo-dist/book/quickstart/rust.html
