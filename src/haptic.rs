@@ -6,7 +6,7 @@ use crate::{device::Device, protocol::CommandServer};
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Haptic {
     pub name: String,
-    pub osc_parameter: String,
+    pub vrc_parameter: String,
     pub strength: f32,
     pub channel: u8,
 }
@@ -14,10 +14,10 @@ pub struct Haptic {
 impl Haptic {
     pub fn new(name: String, channel: u8) -> Self {
         Self {
-            osc_parameter: format!("/avatar/parameters/pat_{}", name.to_lowercase()),
+            vrc_parameter: format!("/avatar/parameters/pat_{}", name.to_lowercase()),
             name,
             channel,
-            strength: 0.5,
+            strength: 1.0,
         }
     }
 
@@ -39,8 +39,8 @@ impl Haptic {
                 });
 
                 ui.horizontal(|ui| {
-                    ui.label("OSC Parameter");
-                    ui.text_edit_singleline(&mut self.osc_parameter);
+                    ui.label("VRC Parameter");
+                    ui.text_edit_singleline(&mut self.vrc_parameter);
                 });
 
                 ui.horizontal(|ui| {

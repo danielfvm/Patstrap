@@ -55,6 +55,7 @@ pub struct Config {
     pub mode: Mode,
     pub auto_start: bool,
     pub header: Header,
+    pub unity_osc_port: u16,
 }
 
 static CFG: LazyLock<Mutex<Config>> = LazyLock::new(|| Mutex::new(Config::default()));
@@ -90,6 +91,7 @@ impl Default for Config {
             mode: Mode::OSC,
             header: Header::Welcome,
             auto_start: false,
+            unity_osc_port: 5123,
         }
     }
 }

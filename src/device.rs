@@ -218,16 +218,16 @@ impl Device {
         }
     }
 
-    pub fn haptic_osc(&mut self, osc: &str, strength: u8) {
+    pub fn haptic_osc(&mut self, osc: &str, strength: u8, duration: u16) {
         let mut cfg = Config::instance();
         let cfg = self.get_cfg(&mut cfg);
 
         for haptic in cfg.haptics.values() {
-            if haptic.osc_parameter == osc {
+            if haptic.vrc_parameter == osc || haptic.name == osc {
                 self.exec(CommandServer::Haptic {
                     channel: haptic.channel,
                     strength: (strength as f32 * haptic.strength) as u8,
-                    duration: 50,
+                    duration,
                 });
             }
         }

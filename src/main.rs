@@ -1,3 +1,5 @@
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
+
 mod ble;
 mod config;
 mod device;
@@ -26,7 +28,7 @@ use tokio_util::sync::CancellationToken;
 use crate::ble::BleConnection;
 use crate::config::{Config, Header, Mode};
 use crate::device::{ConnectionStatus, Device};
-use crate::service::OSCService;
+use crate::service::{OSCService, OSCUnity};
 use crate::wifi::WifiConnection;
 
 pub const LIGHT_RED: Color32 = Color32::LIGHT_RED;
@@ -92,6 +94,7 @@ struct Patstrap {
     devices: Arc<Mutex<Vec<Device>>>,
     app_status: Arc<Mutex<bool>>,
     token: CancellationToken,
+    temp_port_number: String,
 }
 
 impl Patstrap {
@@ -118,10 +121,13 @@ impl Patstrap {
         let token = CancellationToken::new();
         let token_c = token.clone();
         tokio::spawn(async move {
+            let _ = OSCUnity::new(devices_c.clone(), app_status_c.clone()).await;
+
             if let Err(err) = OSCService::new(devices_c, token_c, app_status_c).await {
                 warn!("{:?}", err);
             }
         });
+
 
         let devices_copy = devices.clone();
         let token_cpy = token.clone();
@@ -143,6 +149,7 @@ impl Patstrap {
             path,
             app_status,
             devices,
+            temp_port_number: String::new(),
         }
     }
 }
@@ -316,9 +323,27 @@ impl eframe::App for Patstrap {
                                 }
                             });
                     });
+
                     ui.horizontal(|ui| {
                         ui.label("Auto start");
                         ui.checkbox(&mut Config::instance().auto_start, "");
+                    });
+
+                    ui.horizontal(|ui| {
+                        ui.label("Unity OSC Port");
+
+                        let response = ui.text_edit_singleline(&mut self.temp_port_number); 
+
+                        let submit = response.lost_focus()
+                            && (ui.input(|i| i.key_pressed(egui::Key::Enter)) || true);
+
+                        if submit {
+                            if let Ok(port) = self.temp_port_number.parse::<u16>() {
+                                Config::instance().unity_osc_port = port;
+                            }
+                        } else if !response.has_focus() {
+                            self.temp_port_number = Config::instance().unity_osc_port.to_string();
+                        }
                     });
                 }
             }
