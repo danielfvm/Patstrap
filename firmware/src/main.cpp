@@ -3,6 +3,7 @@
 #include <ESP8266WiFi.h>
 #include <cstdint>
 #include "protocol.hpp"
+#include <string>
 
 #define PIN_BATTERY_LEVEL A0
 #define PIN_INTERNAL_LED 2 // indicates if connected with server (low active)
@@ -151,6 +152,43 @@ void setup() {
   server.begin();
 }
 
+CommandServer getCommand(WiFiClient client)
+{
+  const char* data = client.peekBuffer();
+  int datalen = client.peekAvailable();
+
+  int end = -1;
+  //int start = -1;
+  for (int i = 0; i < datalen; i++) {
+    /*if (data[i] == '\x0B') {
+      start = i;
+    }*/
+
+    if (data[i] == '\x0A') {
+      end = i;
+      break;
+    }
+  }
+
+  if (end == -1/* || start == -1*/)
+    return CommandServer { .tag = Tag::Invalid };
+
+  uint8_t channel = stoi(std::string(data, 2), nullptr, 16);
+  uint8_t strength = stoi(std::string(data + 2, 2), nullptr, 16);
+  uint16_t duration = stoi(std::string(data + 4, 4), nullptr, 16);
+
+  client.peekConsume(end + 1);
+
+  return CommandServer {
+    .tag = Tag::Haptic,
+    .haptic = {
+      .channel = channel,
+      .strength = strength,
+      .duration = duration,
+    }
+  };
+}
+
 void loop() {
   MDNS.update();
 
@@ -192,10 +230,30 @@ void loop() {
         pwm[i].update(dt);
 
       // Process recv bytes
-      uint8_t data[32];
+      // uint8_t data[32];
 
-      int len = client.read(data, 32);
-      if (len > 0) {
+      CommandServer cmd = getCommand(client);
+      while (cmd.tag == Tag::Haptic) {
+        if (cmd.haptic.channel < GPIO_HAPTIC_MAPPING.size()) {
+          auto& [name, pin] = GPIO_HAPTIC_MAPPING[cmd.haptic.channel];
+          uint8_t strength = cmd.haptic.strength;
+          uint16_t duration = cmd.haptic.duration;
+
+          pwm[cmd.haptic.channel].set(duration, (float)strength / 255.0);
+        }
+
+        cmd = getCommand(client);
+      }
+
+
+          //  if (command.haptic.channel < GPIO_HAPTIC_MAPPING.size()) {
+     /* auto& [name, pin] = GPIO_HAPTIC_MAPPING[command.haptic.channel];
+      uint8_t strength = command.haptic.strength;
+      uint16_t duration = command.haptic.duration;
+
+      pwm[command.haptic.channel].set(duration, (float)strength / 255.0);*/
+
+      /*if (len > 0) {
         CommandServer command = CommandServer::from_bytes(data, len);
         switch (command.tag) {
           case Tag::Info: {
@@ -222,19 +280,12 @@ void loop() {
   
               pwm[command.haptic.channel].set(duration, (float)strength / 255.0);
 
-              reply(CommandClient {
-                .tag = Tag::Haptic,
-                .haptic = { .status = 1 },
-              });
             }
           }
           default: {
-            reply(CommandClient {
-              .tag = Tag::Invalid,
-            });
           }
         }
-      }
+      }*/
       client.flush();
 
       // Send keep alive packet with averaged battery value

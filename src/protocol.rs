@@ -48,15 +48,26 @@ pub enum CommandServer {
 
 impl CommandServer {
     pub fn as_bytes(&self) -> Vec<u8> {
+        /*match *self {
+            Self::Haptic {
+                channel,
+                strength,
+                duration,
+            } => vec![ 3, 6, channel, strength]
+                .into_iter()
+                .chain(duration.to_le_bytes())
+                .collect::<Vec<u8>>(),
+        }*/
+
         match *self {
             Self::Haptic {
                 channel,
                 strength,
                 duration,
-            } => vec![3, 6, channel, strength]
-                .into_iter()
-                .chain(duration.to_le_bytes())
-                .collect::<Vec<u8>>(),
+            } => {
+               let hex_string = format!("{:02X}{:02X}{:04X}\x0A", channel, strength, duration);
+               hex_string.into_bytes()
+            }
         }
     }
 }

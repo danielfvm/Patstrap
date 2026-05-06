@@ -41,7 +41,11 @@ impl Connection for WifiConnection {
             return Err(anyhow::Error::msg("Context error"));
         };
 
-        writer.write(data).await.map_err(Into::into)
+        let res = writer.write(data).await.map_err(Into::into);
+
+        let _ = writer.flush().await;
+
+        res
     }
 
     async fn disconnect(&self, ctx: Self::Ctx) -> anyhow::Result<()> {

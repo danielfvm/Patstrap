@@ -1,0 +1,7 @@
+{
+  "name": "dev.deancode.patstrap",
+  "version": "1.0.0",
+  "displayName": "Patstrap SDK",
+  "unity": "2021.3",
+  "description": "SDK for the Patstrap project that allows for communicating with the Patstrap hardware."
+}

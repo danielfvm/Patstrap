@@ -37,7 +37,7 @@ pub enum Mode {
 impl Display for Mode {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Mode::OSC => f.write_str("VRChat (OSC)"),
+            Mode::OSC => f.write_str("OSC"),
             Mode::Unity => f.write_str("Unity"),
         }
     }
